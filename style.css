@@ -1354,17 +1354,7 @@ input:checked + .slider:before {
     text-align: center;
     white-space: nowrap;
 }
-/* ===== НОВЫЕ СТИЛИ ДЛЯ ПРОФИЛЯ КАК НА ФОТО ===== */
-.profile-new-container {
-    background: rgba(25, 25, 25, 0.95);
-    border-radius: 20px;
-    padding: 40px;
-    border: 1px solid #333;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
-    max-width: 800px;
-    margin: 0 auto;
-}
-
+/* НОВЫЕ СТИЛИ ДЛЯ ПРОФИЛЯ (как на скриншоте) */
 .profile-top {
     display: flex;
     align-items: center;
@@ -1380,7 +1370,6 @@ input:checked + .slider:before {
     border: 3px solid #444;
     flex-shrink: 0;
     background: #2a2a2a;
-    position: relative;
 }
 
 .profile-avatar-new img {
@@ -1397,7 +1386,6 @@ input:checked + .slider:before {
     color: #fff;
     font-size: 1.8rem;
     margin-bottom: 5px;
-    font-weight: bold;
 }
 
 .profile-username-new {
@@ -1417,8 +1405,6 @@ input:checked + .slider:before {
     gap: 10px;
     flex-wrap: wrap;
     margin-bottom: 30px;
-    padding-bottom: 25px;
-    border-bottom: 1px solid #333;
 }
 
 .action-btn-new {
@@ -1447,10 +1433,6 @@ input:checked + .slider:before {
     background: rgba(255, 255, 255, 0.2);
     border-color: #666;
     transform: translateY(-2px);
-}
-
-.action-btn-new.telegram:hover {
-    background: rgba(0, 136, 204, 0.2);
 }
 
 .profile-description-new,
@@ -1504,10 +1486,6 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 768px) {
-    .profile-new-container {
-        padding: 25px;
-    }
-    
     .profile-top {
         flex-direction: column;
         text-align: center;
@@ -1519,7 +1497,6 @@ input:checked + .slider:before {
     
     .profile-actions-new {
         flex-direction: column;
-        justify-content: center;
     }
     
     .action-btn-new {
