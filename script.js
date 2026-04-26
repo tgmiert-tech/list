@@ -1,1018 +1,1334 @@
-const members = [
-    {
-        id: 1,
-        nickname: "миерт",
-        username: "@tgmiert",
-        category: "Модерация",
-        role: "Владелец",
-        description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
-        avatar: "img/avatar1.jpg",
-        verified: true,
-        pinned: true,
-        project: "https://t.me/+hgYBTlhzZOZmNDY0",
-        telegram: "tgmirok",
-        chat: "https://t.me/+fvkCt3uNSc84NTE0",
-        joinDate: "2026-05-05",
-        activity: "Постоянная",
-        details: "Создатель и владелеца fame list. Занимаюсь развитием сообщества и модерацией. Отвечаю на вопросы по поводу добавления в список и других услуг.",
-        skills: ["Администрирование", "Модерация", "Развитие сообщества"],
-        socials: {
-            telegram: "@tgmirok",
-            project: "https://t.me/+hgYBTlhzZOZmNDY0",
-        }
-    },    
-];
-
-let currentTheme = 'black';
-let currentNeonColor = '#808080';
-let currentNeonIntensity = 0.5;
-let currentNeonSpeed = 5;
-let currentAnimatedBg = 'hooks';
-let currentBgSpeed = 10;
-let currentBgOpacity = 0.5;
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM загружен, инициализация...');
-    initNavigation();
-    initMembers();
-    initSnow();
-    initSettings();
-    initNeonControls();
-    initModals();
-    loadSavedSettings();
-    initDynamicNeon();
-    initAllAvatars();
-});
-
-function generateBgGrid() {
-    const grid = document.querySelector('.animated-bg-grid');
-    if (!grid) {
-        console.log('Сетка фонов не найдена');
-        return;
-    }
-    
-    grid.innerHTML = '';
-    
-    allBackgrounds.forEach(bg => {
-        const option = document.createElement('div');
-        option.className = `animated-bg-option ${bg === currentAnimatedBg ? 'active' : ''}`;
-        option.dataset.bg = bg;
-        
-        option.innerHTML = `
-            <div class="bg-preview ${bg}-bg"></div>
-            <span>${getBgName(bg)}</span>
-        `;
-        
-        option.addEventListener('click', function() {
-            document.querySelectorAll('.animated-bg-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            this.classList.add('active');
-            currentAnimatedBg = this.dataset.bg;
-            console.log('Выбран фон:', currentAnimatedBg);
-        });
-        
-        grid.appendChild(option);
-    });
-    console.log('Сетка фонов сгенерирована');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-function getBgName(bg) {
-    const names = {
-        'particles': 'Частицы', 'waves': 'Волны', 'pulse': 'Пульсация',
-        'hooks': 'Зацепки', 'circuit': 'Микросхемы', 'grid': 'Сетка',
-        'dots': 'Точки', 'lines': 'Линии', 'hexagon': 'Шестиугольники',
-        'triangles': 'Треугольники', 'squares': 'Квадраты', 'circles': 'Круги',
-        'nebula': 'Туманность', 'galaxy': 'Галактика', 'cosmic': 'Космос',
-        'stardust': 'Звёздная пыль', 'matrix': 'Матрица', 'cyberpunk': 'Киберпанк',
-        'circuit2': 'Микросхема 2', 'glitch': 'Глитч', 'rain': 'Дождь',
-        'fire': 'Огонь', 'water': 'Вода', 'wind': 'Ветер',
-        'vortex': 'Воронка', 'spiral': 'Спираль', 'radar': 'Радар',
-        'sonar': 'Сонар'
-    };
-    
-    return names[bg] || bg;
+body {
+    background: #121212;
+    color: #e0e0e0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.3s ease;
 }
 
-function loadAvatarWithFallback(imgElement, src, nickname) {
-    return new Promise((resolve) => {
-        const img = new Image();
-        
-        img.onload = () => {
-            imgElement.src = src;
-            imgElement.style.opacity = '1';
-            resolve(true);
-        };
-        
-        img.onerror = () => {
-            const initial = nickname.charAt(0).toUpperCase();
-            const color = generateColorFromNickname(nickname);
-            
-            const svg = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
-                    <rect width="100" height="100" fill="${color}" rx="50"/>
-                    <text x="50" y="50" text-anchor="middle" dy="0.35em" 
-                          font-family="Arial, sans-serif" font-size="40" 
-                          font-weight="bold" fill="#fff">${initial}</text>
-                </svg>
-            `;
-            
-            imgElement.src = 'data:image/svg+xml;base64,' + btoa(svg);
-            imgElement.style.opacity = '1';
-            imgElement.classList.add('avatar-fallback');
-            resolve(false);
-        };
-        
-        imgElement.style.opacity = '0';
-        if (imgElement.parentElement) {
-            imgElement.parentElement.classList.add('loading');
-        }
-        
-        setTimeout(() => img.src = src, 100);
-        
-        setTimeout(() => {
-            if (imgElement.parentElement) {
-                imgElement.parentElement.classList.remove('loading');
-            }
-            imgElement.style.opacity = '1';
-        }, 2000);
-    });
+
+.snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
 }
 
-function generateColorFromNickname(nickname) {
-    const colors = [
-        '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
-        '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9',
-        '#F8C471', '#82E0AA', '#F1948A', '#85C1E9', '#D7BDE2'
-    ];
-    
-    let hash = 0;
-    for (let i = 0; i < nickname.length; i++) {
-        hash = nickname.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    
-    return colors[Math.abs(hash) % colors.length];
+.snowflake {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: snowfall linear infinite;
 }
 
-function initNavigation() {
-    console.log('Инициализация навигации...');
-    
-    const menuToggle = document.getElementById('menu-toggle');
-    const closeMenu = document.getElementById('close-menu');
-    const sideMenu = document.getElementById('side-menu');
-    
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            sideMenu.classList.add('active');
-            console.log('Меню открыто');
-        });
-    } else {
-        console.error('Кнопка меню не найдена');
-    }
-    
-    if (closeMenu) {
-        closeMenu.addEventListener('click', () => {
-            sideMenu.classList.remove('active');
-            console.log('Меню закрыто');
-        });
-    }
-    
-    const navTabs = document.querySelectorAll('.nav-tab');
-    const menuItems = document.querySelectorAll('.menu-item');
-    const sections = document.querySelectorAll('.section');
-    
-    function switchSection(sectionId) {
-        console.log('Переключение на секцию:', sectionId);
-        
-        sections.forEach(section => {
-            section.classList.remove('active-section');
-        });
-        
-        const targetSection = document.getElementById(sectionId);
-        if (targetSection) {
-            targetSection.classList.add('active-section');
-            console.log('Секция активирована:', sectionId);
-        } else {
-            console.error('Секция не найдена:', sectionId);
-        }
-        
-        navTabs.forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.dataset.section === sectionId) {
-                tab.classList.add('active');
-            }
-        });
-        
-        menuItems.forEach(item => {
-            item.classList.remove('active');
-            if (item.dataset.section === sectionId) {
-                item.classList.add('active');
-            }
-        });
-    }
-    
-    navTabs.forEach(tab => {
-        if (tab.dataset.section) {
-            tab.addEventListener('click', () => {
-                switchSection(tab.dataset.section);
-            });
-        }
-    });
-    
-    menuItems.forEach(item => {
-        if (item.dataset.section) {
-            item.addEventListener('click', () => {
-                switchSection(item.dataset.section);
-                if (sideMenu) sideMenu.classList.remove('active');
-            });
-        }
-    });
-    
-    const faqBtn = document.getElementById('faq-btn');
-    const settingsBtn = document.getElementById('settings-btn');
-    const menuSettings = document.getElementById('menu-settings');
-    const animatedBgBtn = document.getElementById('animated-bg-btn');
-    const menuAnimatedBg = document.getElementById('menu-animated-bg');
-    
-    const menuFaq = document.querySelector('.menu-item[data-section="faq"]');
-    if (menuFaq) {
-        menuFaq.addEventListener('click', () => {
-            switchSection('faq-section');
-            if (sideMenu) sideMenu.classList.remove('active');
-        });
-    }
-    
-    if (settingsBtn) {
-        settingsBtn.addEventListener('click', () => {
-            openModal('settings-modal');
-        });
-    }
-    
-    if (menuSettings) {
-        menuSettings.addEventListener('click', () => {
-            openModal('settings-modal');
-            if (sideMenu) sideMenu.classList.remove('active');
-        });
-    }
-    
-    console.log('Навигация инициализирована');
+@keyframes snowfall {
+    to { transform: translateY(100vh); }
 }
 
-function initAllAvatars() {
-    console.log('Инициализация аватаров...');
-    loadMembers();
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-function initMembers() {
-    console.log('Инициализация участников...');
-    loadMembers();
-    
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    if (filterBtns.length > 0) {
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                const category = this.dataset.category;
-                console.log('Фильтр:', category);
-                filterMembers(category);
-            });
-        });
-    } else {
-        console.error('Кнопки фильтра не найдены');
-    }
-    
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            console.log('Поиск:', searchTerm);
-            searchMembers(searchTerm);
-        });
-    } else {
-        console.error('Поле поиска не найдено');
+.nav-left, .nav-center, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.menu-btn, .nav-icon {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.menu-btn:hover, .nav-icon:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.nav-center {
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-tab {
+    background: none;
+    border: none;
+    color: #888;
+    padding: 12px 25px;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: all 0.3s;
+    font-size: 1rem;
+    border: 1px solid transparent;
+}
+
+.nav-tab.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: #666;
+}
+
+.nav-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.05);
+    color: #aaa;
+    border-color: #444;
+}
+
+.channel-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #888;
+    padding: 12px 25px;
+    border-radius: 25px;
+    transition: all 0.3s;
+    border: 1px solid transparent;
+}
+
+.channel-link:hover {
+    background: rgba(0, 136, 204, 0.1);
+    color: #0088cc;
+    border-color: rgba(0, 136, 204, 0.3);
+}
+
+
+.apply-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+    border: 1px solid #444;
+    border-radius: 25px;
+    color: #e0e0e0;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.apply-btn:hover {
+    background: linear-gradient(135deg, #3a3a3a, #4a4a3a);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    color: #fff;
+    border-color: #666;
+}
+
+.apply-btn-large {
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+    border: 1px solid #444;
+    border-radius: 30px;
+    color: #e0e0e0;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.apply-btn-large:hover {
+    background: linear-gradient(135deg, #3a3a3a, #4a4a4a);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    color: #fff;
+    border-color: #666;
+}
+
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 280px;
+    height: 100vh;
+    background: rgba(20, 20, 20, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    border-right: 1px solid #333;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.menu-header h3 {
+    color: #fff;
+}
+
+.close-menu {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s;
+}
+
+.close-menu:hover {
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    color: #aaa;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.3s;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.menu-item:hover, .menu-item.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: translateX(5px);
+}
+
+
+.section {
+    display: none;
+    padding: 30px;
+    min-height: calc(100vh - 70px);
+}
+
+.section.active-section {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.search-container {
+    background: rgba(25, 25, 25, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border: 1px solid #333;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.search-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 15px 15px 15px 50px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 15px rgba(102, 102, 102, 0.3);
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.filter-btn.active, .filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: #666;
+    transform: translateY(-2px);
+}
+
+
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.member-card {
+    background: rgba(25, 25, 25, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid #333;
+    transition: all 0.4s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.member-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #666, transparent);
+}
+
+.member-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: #666;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+}
+
+.member-card.pinned::after {
+    content: '📌';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+.member-card.verified::before {
+    content: '✓';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 25px;
+    height: 25px;
+    background: rgba(0, 170, 0, 0.2);
+    color: #0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: 1px solid #0f0;
+}
+
+.member-card.scam {
+    border-color: #ff4444;
+    background: rgba(255, 50, 50, 0.05);
+}
+
+.member-card.scam::before {
+    content: '⚠️';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 25px;
+    height: 25px;
+    background: rgba(255, 50, 50, 0.2);
+    color: #ff4444;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: 1px solid #ff4444;
+    animation: warningPulse 1.5s infinite;
+}
+
+.member-card.scam .member-role {
+    background: rgba(255, 50, 50, 0.1);
+    color: #ff6666;
+    border-color: #ff4444;
+}
+
+.member-card.scam .member-badges {
+    color: #ff6666;
+}
+
+.member-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 2px solid #333;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.member-avatar img,
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: bicubic;
+}
+
+.member-card:hover .member-avatar {
+    border-color: #666;
+}
+
+.member-card:hover .member-avatar img {
+    transform: scale(1.1);
+}
+
+.member-avatar::after,
+.profile-avatar::after {
+    content: attr(data-initial);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 60%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.5rem;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.member-card:hover .member-avatar::after,
+.profile-header:hover .profile-avatar::after {
+    opacity: 1;
+}
+
+img.avatar-fallback {
+    background: linear-gradient(135deg, #2a2a2a, #3a3a3a) !important;
+}
+
+@keyframes avatarPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.member-card.loading .member-avatar,
+.profile-header.loading .profile-avatar {
+    animation: avatarPulse 2s ease-in-out infinite;
+}
+
+.member-info h3 {
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.member-role {
+    display: inline-block;
+    padding: 5px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-bottom: 15px;
+    border: 1px solid #333;
+}
+
+.member-description {
+    color: #888;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-height: 70px;
+    overflow: hidden;
+}
+
+.member-badges {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+}
+
+
+.profile-header {
+    background: rgba(25, 25, 25, 0.95);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 30px;
+    border: 1px solid #333;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #666, transparent);
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    margin-bottom: 25px;
+    overflow: hidden;
+    border: 3px solid #333;
+    position: relative;
+}
+
+.profile-title {
+    color: #fff;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.profile-username {
+    color: #888;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.profile-badges {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    padding: 6px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #aaa;
+    border: 1px solid #333;
+}
+
+.badge.verified {
+    background: rgba(0, 170, 0, 0.1);
+    color: #0f0;
+    border-color: #0f0;
+}
+
+.badge.pinned {
+    background: rgba(170, 85, 0, 0.1);
+    color: #fa0;
+    border-color: #fa0;
+}
+
+.badge.category {
+.badge.scam {
+    background: rgba(255, 50, 50, 0.15);
+    color: #ff4444;
+    border-color: #ff4444;
+    position: relative;
+    overflow: hidden;
+}
+
+.badge.scam::after {
+    content: '⚠️';
+    margin-left: 5px;
+    animation: warningPulse 1.5s infinite;
+}
+
+@keyframes warningPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+    background: rgba(102, 102, 255, 0.1);
+    color: #66f;
+    border-color: #66f;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.action-btn {
+    padding: 12px 25px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.action-btn.telegram {
+    background: rgba(0, 136, 204, 0.1);
+    border-color: rgba(0, 136, 204, 0.3);
+    color: #0088cc;
+}
+
+.action-btn.telegram:hover {
+    background: rgba(0, 136, 204, 0.2);
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #666;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.profile-content {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 30px;
+}
+
+.profile-description {
+    background: rgba(25, 25, 25, 0.95);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 30px;
+    border: 1px solid #333;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+.profile-description h3 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+.profile-description p {
+    color: #888;
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+.profile-stats {
+    background: rgba(25, 25, 25, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid #333;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    height: fit-content;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #333;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    color: #aaa;
+}
+
+.stat-value {
+    color: #fff;
+    font-weight: bold;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: rgba(20, 20, 20, 0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid #333;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: 1px solid #333;
+}
+
+.modal-header h2 {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s;
+}
+
+.close-modal:hover {
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+
+.settings-tabs {
+    display: flex;
+    padding: 0 30px;
+    border-bottom: 1px solid #333;
+    flex-wrap: wrap;
+}
+
+.settings-tab {
+    padding: 15px 25px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.settings-tab.active {
+    color: #fff;
+    border-bottom-color: #666;
+}
+
+.settings-content {
+    padding: 30px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+
+.neon-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-group label {
+    color: #aaa;
+    font-size: 0.95rem;
+}
+
+#neon-color {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background: #1a1a1a;
+    cursor: pointer;
+}
+
+.color-preview {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid #333;
+    margin-top: 5px;
+    align-self: flex-start;
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 8px;
+    background: #1a1a1a;
+    border-radius: 4px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #666;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #888;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #666;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #888;
+}
+
+.neon-apply-btn {
+    padding: 15px 30px;
+    background: rgba(102, 102, 255, 0.1);
+    border: 1px solid rgba(102, 102, 255, 0.3);
+    border-radius: 25px;
+    color: #66f;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.neon-apply-btn:hover {
+    background: rgba(102, 102, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.theme-option.active, .theme-option:hover {
+    border-color: #666;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px);
+}
+
+.theme-preview {
+    width: 100%;
+    height: 60px;
+    border-radius: 5px;
+    border: 1px solid #333;
+}
+
+.dark-theme { background: linear-gradient(135deg, #1a1a1a, #2a2a2a); }
+.black-theme { background: linear-gradient(135deg, #000, #111); }
+.red-theme { background: linear-gradient(135deg, #330000, #440000); }
+.red-black-theme { background: linear-gradient(135deg, #330000, #000); }
+.red-gray-theme { background: linear-gradient(135deg, #330000, #333); }
+.purple-theme { background: linear-gradient(135deg, #330033, #440044); }
+.blue-theme { background: linear-gradient(135deg, #000033, #000044); }
+.green-theme { background: linear-gradient(135deg, #003300, #004400); }
+.orange-theme { background: linear-gradient(135deg, #331a00, #442200); }
+.pink-theme { background: linear-gradient(135deg, #330033, #440044); }
+
+
+.background-upload {
+    margin-top: 20px;
+}
+
+.upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.upload-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #666;
+    transform: translateY(-3px);
+}
+
+.bg-preview {
+    margin-top: 20px;
+    width: 100%;
+    height: 200px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    display: none;
+    border: 1px solid #333;
+}
+
+.bg-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.effect-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin-top: 15px;
+    border: 1px solid #333;
+}
+
+.effect-info h4 {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.effect-info p {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #333;
+    transition: .4s;
+    border-radius: 34px;
+    border: 1px solid #444;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 3px;
+    background-color: #888;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: rgba(102, 102, 102, 0.3);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+    background-color: #fff;
+}
+
+
+.faq-content {
+    background: rgba(25, 25, 25, 0.95);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    border: 1px solid #333;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+.faq-content h2 {
+    margin-bottom: 20px;
+}
+
+.faq-content p {
+    color: #888;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.profile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 30px;
+    background: rgba(0, 136, 204, 0.1);
+    color: #0088cc;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: all 0.3s;
+    border: 1px solid rgba(0, 136, 204, 0.3);
+    font-size: 1.1rem;
+}
+
+.profile-link:hover {
+    background: rgba(0, 136, 204, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 136, 204, 0.2);
+}
+
+.price-info {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid #333;
+}
+
+.price-info h3 {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.price-info p {
+    margin: 10px 0;
+    font-size: 1rem;
+}
+
+.price-info strong {
+    color: #0f0;
+}
+
+.apply-section {
+    margin-top: 30px;
+    padding: 25px;
+    background: rgba(255, 51, 102, 0.1);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 51, 102, 0.3);
+    text-align: center;
+}
+
+.apply-section h3 {
+    color: #ff6699;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+
+@media (max-width: 1100px) {
+    .profile-content {
+        grid-template-columns: 1fr;
     }
 }
 
-function loadMembers() {
-    const container = document.getElementById('members-container');
-    if (!container) {
-        console.error('Контейнер участников не найден');
-        return;
+@media (max-width: 768px) {
+    .nav-center {
+        display: none;
     }
     
-    container.innerHTML = '';
-    
-    if (members.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #888; padding: 40px;">Нет участников для отображения</p>';
-        console.log('Нет участников для отображения');
-        return;
+    .top-nav {
+        padding: 15px;
     }
     
-    const sortedMembers = [...members].sort((a, b) => {
-        if (a.pinned && !b.pinned) return -1;
-        if (!a.pinned && b.pinned) return 1;
-        if (a.verified && !b.verified) return -1;
-        if (!a.verified && b.verified) return 1;
-        return 0;
-    });
-    
-    sortedMembers.forEach(member => {
-        const card = createMemberCard(member);
-        container.appendChild(card);
-    });
-    
-    document.querySelectorAll('.member-card').forEach(card => {
-        card.addEventListener('click', function() {
-            const memberId = this.dataset.id;
-            console.log('Клик по участнику:', memberId);
-            showProfile(memberId);
-        });
-    });
-    
-    console.log('Участники загружены:', sortedMembers.length);
-}
-
-function createMemberCard(member) {
-    const card = document.createElement('div');
-    card.className = 'member-card';
-    card.dataset.id = member.id;
-    card.dataset.category = member.category;
-    
-    if (member.scam) card.classList.add('scam');
-    else if (member.pinned) card.classList.add('pinned');
-    if (member.verified && !member.scam) card.classList.add('verified');
-    
-    const avatarId = `avatar-${member.id}`;
-    
-    card.innerHTML = `
-        <div class="member-avatar" data-initial="${member.nickname.charAt(0).toUpperCase()}">
-            <img id="${avatarId}" 
-                 src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI5MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
-                 alt="${member.nickname}"
-                 loading="lazy">
-        </div>
-        
-        <div class="member-info">
-            <h3>${member.nickname} ${member.scam ? '⚠️' : (member.verified ? '✓' : '')}</h3>
-            <div class="member-role">${member.role}</div>
-            <p class="member-description">${member.description}</p>
-            <div class="member-badges">
-                ${member.scam ? '⚠️ ' : ''}${member.pinned ? '📍 ' : ''}${member.verified ? '✓ ' : ''}${member.category}
-            </div>
-        </div>
-    `;
-    
-    setTimeout(() => {
-        const img = card.querySelector(`#${avatarId}`);
-        if (img) {
-            loadAvatarWithFallback(img, `img/avatar${member.id}.jpg`, member.nickname);
-        }
-    }, 10);
-    
-    return card;
-}
-
-function filterMembers(category) {
-    const cards = document.querySelectorAll('.member-card');
-    console.log('Фильтрация участников по категории:', category, 'найдено карточек:', cards.length);
-    
-    cards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-            card.style.display = 'block';
-            setTimeout(() => {
-                card.style.opacity = '1';
-            }, 10);
-        } else {
-            card.style.opacity = '0';
-            setTimeout(() => {
-                card.style.display = 'none';
-            }, 300);
-        }
-    });
-}
-
-function searchMembers(term) {
-    const cards = document.querySelectorAll('.member-card');
-    const activeFilter = document.querySelector('.filter-btn.active')?.dataset.category || 'all';
-    
-    cards.forEach(card => {
-        const nickname = card.querySelector('h3').textContent.toLowerCase();
-        const description = card.querySelector('.member-description').textContent.toLowerCase();
-        
-        const matchesSearch = nickname.includes(term) || description.includes(term);
-        const matchesFilter = activeFilter === 'all' || card.dataset.category === activeFilter;
-        
-        if (matchesSearch && matchesFilter) {
-            card.style.display = 'block';
-            setTimeout(() => {
-                card.style.opacity = '1';
-            }, 10);
-        } else {
-            card.style.opacity = '0';
-            setTimeout(() => {
-                card.style.display = 'none';
-            }, 300);
-        }
-    });
-}
-
-function showProfile(memberId) {
-    const member = members.find(m => m.id == memberId);
-    if (!member) {
-        console.error('Участник не найден:', memberId);
-        return;
+    .section {
+        padding: 15px;
     }
     
-    const container = document.getElementById('profile-content');
-    if (!container) {
-        console.error('Контейнер профиля не найден');
-        return;
+    .members-grid {
+        grid-template-columns: 1fr;
     }
     
-    const joinDate = new Date(member.joinDate);
-    const formattedDate = joinDate.toLocaleDateString('ru-RU', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+    .filter-buttons {
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
     
-    let badgesHtml = '';
-    if (member.verified) badgesHtml += '<span class="badge verified">✓ Верифицирован</span>';
-    if (member.pinned) badgesHtml += '<span class="badge pinned">📌 Закреплён</span>';
-    badgesHtml += `<span class="badge category">${member.category}</span>`;
+    .theme-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
     
-    const profileAvatarId = `profile-avatar-${member.id}`;
+    .profile-header, .profile-description {
+        padding: 25px;
+    }
     
-    container.innerHTML = `
-        <div class="profile-card-new">
-            <div class="profile-top">
-                <div class="profile-avatar-new" data-initial="${member.nickname.charAt(0).toUpperCase()}">
-                    <img id="${profileAvatarId}" 
-                         src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
-                         alt="${member.nickname}"
-                         loading="eager">
-                </div>
-                <div class="profile-info-new">
-                    <h1 class="profile-name-new">${member.nickname}</h1>
-                    <p class="profile-username-new">${member.username}</p>
-                    <div class="profile-badges-new">
-                        ${badgesHtml}
-                    </div>
-                </div>
-            </div>
-            
-            <div class="profile-actions-new">
-                ${member.telegram ? `
-                <a href="https://t.me/${member.telegram}" class="action-btn-new telegram" target="_blank">
-                    <i class="fab fa-telegram"></i> Написать в ЛС
-                </a>` : ''}
-                ${member.project ? `
-                <a href="${member.project}" class="action-btn-new" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> Основной канал
-                </a>` : ''}
-                ${member.chat ? `
-                <a href="${member.chat}" class="action-btn-new" target="_blank">
-                    <i class="fas fa-comments"></i> Чат
-                </a>` : ''}
-                <button class="action-btn-new" onclick="copyProfileLink('${member.nickname}')">
-                    <i class="fas fa-share"></i> Поделиться
-                </button>
-            </div>
-            
-            <div class="profile-description-new">
-                <h3>Описание</h3>
-                <p>${member.description || 'Нет описания'}</p>
-            </div>
-            
-            ${member.details ? `
-            <div class="profile-details-new">
-                <h3>Детали</h3>
-                <p>${member.details}</p>
-            </div>` : ''}
-            
-            ${member.skills && member.skills.length > 0 ? `
-            <div class="profile-skills-new">
-                <h3>Навыки и специализация</h3>
-                <p>${member.skills.join(' • ')}</p>
-            </div>` : ''}
-            
-            <div class="profile-stats-new">
-                <h3>Статистика</h3>
-                <div class="stats-grid-new">
-                    <div class="stat-item-new">
-                        <span class="stat-label-new">Статус:</span>
-                        <span class="stat-value-new">${member.role}</span>
-                    </div>
-                    <div class="stat-item-new">
-                        <span class="stat-label-new">Верификация:</span>
-                        <span class="stat-value-new">${member.verified ? '✓ Подтверждён' : '✗ Не подтверждён'}</span>
-                    </div>
-                    <div class="stat-item-new">
-                        <span class="stat-label-new">Закреп:</span>
-                        <span class="stat-value-new">${member.pinned ? '📌 Включён' : '✗ Выключен'}</span>
-                    </div>
-                    <div class="stat-item-new">
-                        <span class="stat-label-new">Дата регистрации:</span>
-                        <span class="stat-value-new">${formattedDate}</span>
-                    </div>
-                    <div class="stat-item-new">
-                        <span class="stat-label-new">Активность:</span>
-                        <span class="stat-value-new">${member.activity}</span>
-                    </div>
-                    <div class="stat-item-new">
-                        <span class="stat-label-new">ID:</span>
-                        <span class="stat-value-new">${member.id}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
+    .profile-actions {
+        flex-direction: column;
+    }
     
-    setTimeout(() => {
-        const img = document.getElementById(profileAvatarId);
-        if (img) {
-            loadAvatarWithFallback(img, `img/avatar${member.id}.jpg`, member.nickname);
-        }
-    }, 10);
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
     
-    switchSection('profile-details');
-}
-
-function initSnow() {
-    const snowContainer = document.querySelector('.snow-container');
-    if (!snowContainer) return;
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
     
-    createSnowflakes();
+    .member-avatar {
+        width: 60px !important;
+        height: 60px !important;
+    }
     
-    const snowToggle = document.getElementById('snow-effect');
-    if (snowToggle) {
-        snowToggle.addEventListener('change', function() {
-            if (this.checked) {
-                snowContainer.style.display = 'block';
-                createSnowflakes();
-            } else {
-                snowContainer.style.display = 'none';
-                snowContainer.innerHTML = '';
-            }
-        });
+    .profile-avatar {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    
+    .member-avatar::after {
+        font-size: 1.2rem;
+    }
+    
+    .apply-btn {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+    }
+    
+    .nav-right {
+        gap: 10px;
     }
 }
 
-function createSnowflakes() {
-    const snowContainer = document.querySelector('.snow-container');
-    if (!snowContainer) return;
+@media (max-width: 480px) {
+    .logo {
+        font-size: 1.2rem;
+    }
     
-    snowContainer.innerHTML = '';
+    .search-container {
+        padding: 20px;
+    }
     
-    for (let i = 0; i < 60; i++) {
-        const snowflake = document.createElement('div');
-        snowflake.className = 'snowflake';
-        
-        const size = Math.random() * 4 + 2;
-        const startX = Math.random() * 100;
-        const duration = Math.random() * 5 + 5;
-        const opacity = Math.random() * 0.5 + 0.3;
-        
-        snowflake.style.width = `${size}px`;
-        snowflake.style.height = `${size}px`;
-        snowflake.style.left = `${startX}vw`;
-        snowflake.style.opacity = opacity;
-        snowflake.style.animationDuration = `${duration}s`;
-        snowflake.style.animationDelay = `${Math.random() * 5}s`;
-        snowflake.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
-        
-        snowContainer.appendChild(snowflake);
+    .filter-btn {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+    }
+    
+    .member-card {
+        padding: 20px;
+    }
+    
+    .apply-btn {
+        display: none; 
+    }
+    
+    .apply-btn-large {
+        padding: 12px 25px;
+        font-size: 1rem;
     }
 }
 
-function initSettings() {
-    const settingsTabs = document.querySelectorAll('.settings-tab');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    settingsTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            const tabId = this.dataset.tab + '-tab';
-            
-            settingsTabs.forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === tabId) {
-                    content.classList.add('active');
-                }
-            });
-        });
-    });
-    
-    const themeOptions = document.querySelectorAll('.theme-option');
-    
-    themeOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            const theme = this.dataset.theme;
-            
-            themeOptions.forEach(opt => opt.classList.remove('active'));
-            this.classList.add('active');
-            
-            applyTheme(theme);
-        });
-    });
-    
-    const bgUpload = document.getElementById('bg-upload');
-    const bgPreview = document.getElementById('bg-preview');
-    
-    if (bgUpload) {
-        bgUpload.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    bgPreview.innerHTML = `<img src="${e.target.result}" alt="Фон">`;
-                    bgPreview.style.display = 'block';
-                    
-                    localStorage.setItem('fame_background', e.target.result);
-                    document.body.style.backgroundImage = `url(${e.target.result})`;
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundAttachment = 'fixed';
-                    document.body.style.backgroundPosition = 'center';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-    
-    const neonFlowEffect = document.getElementById('neon-flow-effect');
-    if (neonFlowEffect) {
-        neonFlowEffect.addEventListener('change', function() {
-            if (this.checked) {
-                initDynamicNeon();
-            } else {
-                removeNeonFlow();
-            }
-        });
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 15px;
+    padding: 0 10px; 
+}
+
+
+@media (max-width: 1600px) {
+    .members-grid {
+        grid-template-columns: repeat(4, 1fr); 
     }
 }
 
-function initNeonControls() {
-    const neonColor = document.getElementById('neon-color');
-    const neonIntensity = document.getElementById('neon-intensity');
-    const neonSpeed = document.getElementById('neon-speed');
-    const applyNeonBtn = document.getElementById('apply-neon');
-    const intensityValue = document.getElementById('intensity-value');
-    const speedValue = document.getElementById('speed-value');
-    const colorPreview = document.getElementById('neon-color-preview');
-    
-    if (neonColor && colorPreview) {
-        neonColor.addEventListener('input', function() {
-            colorPreview.style.backgroundColor = this.value;
-        });
-        colorPreview.style.backgroundColor = neonColor.value;
-    }
-    
-    if (neonIntensity && intensityValue) {
-        neonIntensity.addEventListener('input', function() {
-            intensityValue.textContent = this.value + '%';
-        });
-        intensityValue.textContent = neonIntensity.value + '%';
-    }
-    
-    if (neonSpeed && speedValue) {
-        const speedLabels = {
-            1: 'Очень медленно',
-            2: 'Медленно',
-            3: 'Немного медленно',
-            4: 'Ниже средней',
-            5: 'Средняя',
-            6: 'Выше средней',
-            7: 'Быстро',
-            8: 'Очень быстро',
-            9: 'Супер быстро',
-            10: 'Максимальная'
-        };
-        
-        neonSpeed.addEventListener('input', function() {
-            speedValue.textContent = speedLabels[this.value] || 'Средняя';
-        });
-        speedValue.textContent = speedLabels[neonSpeed.value] || 'Средняя';
-    }
-    
-    if (applyNeonBtn) {
-        applyNeonBtn.addEventListener('click', function() {
-            const color = neonColor.value;
-            const intensity = parseInt(neonIntensity.value) / 100;
-            const speed = parseInt(neonSpeed.value);
-            
-            applyNeonSettings(color, intensity, speed);
-        });
+@media (max-width: 1200px) {
+    .members-grid {
+        grid-template-columns: repeat(3, 1fr); 
     }
 }
 
-function applyNeonSettings(color, intensity, speed) {
-    currentNeonColor = color;
-    currentNeonIntensity = intensity;
-    currentNeonSpeed = speed;
-    
-    localStorage.setItem('fame_neon_color', color);
-    localStorage.setItem('fame_neon_intensity', intensity);
-    localStorage.setItem('fame_neon_speed', speed);
-    
-    initDynamicNeon();
-}
-
-function initDynamicNeon() {
-    const oldStyle = document.getElementById('dynamic-neon-style');
-    if (oldStyle) oldStyle.remove();
-    
-    const hex = currentNeonColor;
-    const r = parseInt(hex.slice(1,3), 16);
-    const g = parseInt(hex.slice(3,5), 16);
-    const b = parseInt(hex.slice(5,7), 16);
-    
-    const duration = (11 - currentNeonSpeed) + 's';
-    
-    const style = document.createElement('style');
-    style.id = 'dynamic-neon-style';
-    
-    style.textContent = `
-        @keyframes neonFlow {
-            0%, 100% { 
-                box-shadow: 0 0 ${10 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.8 * currentNeonIntensity}),
-                          0 0 ${20 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.6 * currentNeonIntensity}),
-                          0 0 ${30 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.4 * currentNeonIntensity}),
-                          inset 0 0 ${10 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.5 * currentNeonIntensity}); 
-            }
-            50% { 
-                box-shadow: 0 0 ${15 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.9 * currentNeonIntensity}),
-                          0 0 ${25 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.7 * currentNeonIntensity}),
-                          0 0 ${35 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.5 * currentNeonIntensity}),
-                          inset 0 0 ${15 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.6 * currentNeonIntensity}); 
-            }
-        }
-        
-        @keyframes textNeonFlow {
-            0%, 100% { 
-                text-shadow: 0 0 ${5 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.8 * currentNeonIntensity}),
-                           0 0 ${10 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.6 * currentNeonIntensity}); 
-            }
-            50% { 
-                text-shadow: 0 0 ${8 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.9 * currentNeonIntensity}),
-                           0 0 ${15 * currentNeonIntensity}px rgba(${r}, ${g}, ${b}, ${0.7 * currentNeonIntensity}); 
-            }
-        }
-        
-        .neon-flow {
-            animation: neonFlow ${duration} ease-in-out infinite !important;
-        }
-        
-        .text-neon-flow {
-            animation: textNeonFlow ${duration} ease-in-out infinite !important;
-        }
-    `;
-    
-    document.head.appendChild(style);
-    
-    const neonFlowEffect = document.getElementById('neon-flow-effect');
-    if (neonFlowEffect && neonFlowEffect.checked) {
-        applyNeonToElements();
+@media (max-width: 900px) {
+    .members-grid {
+        grid-template-columns: repeat(2, 1fr); 
     }
 }
 
-function applyNeonToElements() {
-    document.querySelectorAll('.member-card').forEach(card => {
-        card.classList.add('neon-flow');
-    });
-    
-    document.querySelectorAll('.modal-content').forEach(modal => {
-        modal.classList.add('neon-flow');
-    });
-    
-    document.querySelectorAll('.upload-btn').forEach(btn => {
-        btn.classList.add('neon-flow');
-    });
-    
-    const profileHeader = document.querySelector('.profile-header');
-    if (profileHeader) {
-        profileHeader.classList.add('neon-flow');
+@media (max-width: 600px) {
+    .members-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 10px;
+        padding: 0 5px;
     }
 }
 
-function removeNeonFlow() {
-    document.querySelectorAll('.neon-flow').forEach(el => {
-        el.classList.remove('neon-flow');
-    });
-    document.querySelectorAll('.text-neon-flow').forEach(el => {
-        el.classList.remove('text-neon-flow');
-    });
-}
-
-function initAnimatedBg() {
-    const bgSpeed = document.getElementById('bg-speed');
-    const bgOpacity = document.getElementById('bg-opacity');
-    const applyBgBtn = document.getElementById('apply-animated-bg');
-    
-    if (bgSpeed) {
-        bgSpeed.addEventListener('input', function() {
-            currentBgSpeed = parseInt(this.value);
-        });
-    }
-    
-    if (bgOpacity) {
-        bgOpacity.addEventListener('input', function() {
-            currentBgOpacity = parseInt(this.value) / 100;
-        });
-    }
-    
-    if (applyBgBtn) {
-        applyBgBtn.addEventListener('click', applyAnimatedBg);
+@media (max-width: 400px) {
+    .members-grid {
+        grid-template-columns: 1fr; 
     }
 }
 
-function applyAnimatedBg() {
-    const bgElement = document.getElementById('animated-bg');
-    if (!bgElement) return;
 
-    allBackgrounds.forEach(bg => {
-        bgElement.classList.remove(`${bg}-bg`);
-    });
-    
-    bgElement.classList.add(`${currentAnimatedBg}-bg`);
-    
-    const speed = currentBgSpeed / 10;
-    bgElement.style.animationDuration = `${20 / speed}s`;
-    
-    bgElement.style.opacity = currentBgOpacity;
-    
-    localStorage.setItem('fame_animated_bg', currentAnimatedBg);
-    localStorage.setItem('fame_bg_speed', currentBgSpeed);
-    localStorage.setItem('fame_bg_opacity', currentBgOpacity);
-    
-    console.log('Фон применен:', currentAnimatedBg);
+.member-card {
+    width: 100%;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
 }
 
-function initModals() {
-    console.log('Инициализация модальных окон...');
-    
-    document.querySelectorAll('.close-modal').forEach(btn => {
-        btn.addEventListener('click', function() {
-            closeModal(this.closest('.modal'));
-        });
-    });
-    
-    window.addEventListener('click', function(event) {
-        if (event.target.classList.contains('modal')) {
-            closeModal(event.target);
-        }
-    });
-    
-    console.log('Модальные окна инициализированы');
+
+.container {
+    max-width: 100% !important;
+    padding: 0 15px !important;
+    margin: 0 auto !important;
 }
 
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        console.log('Модальное окно открыто:', modalId);
-    } else {
-        console.error('Модальное окно не найдено:', modalId);
-    }
+
+.search-container {
+    margin: 0 10px 30px 10px;
+    width: calc(100% - 20px);
 }
 
-function closeModal(modal) {
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        console.log('Модальное окно закрыто');
-    }
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 5px;
 }
 
-function loadSavedSettings() {
-    console.log('Загрузка сохраненных настроек...');
-    
-    const savedTheme = localStorage.getItem('fame_theme') || 'black';
-    if (savedTheme) {
-        const themeOption = document.querySelector(`.theme-option[data-theme="${savedTheme}"]`);
-        if (themeOption) {
-            themeOption.click();
-        } else {
-            applyTheme('black');
-        }
-    } else {
-        applyTheme('black');
-    }
-    
-    const savedBg = localStorage.getItem('fame_background');
-    if (savedBg) {
-        document.body.style.backgroundImage = `url(${savedBg})`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundAttachment = 'fixed';
-        document.body.style.backgroundPosition = 'center';
-    }
-    
-    const savedNeonColor = localStorage.getItem('fame_neon_color') || '#808080';
-    const savedNeonIntensity = parseFloat(localStorage.getItem('fame_neon_intensity')) || 0.5;
-    const savedNeonSpeed = parseInt(localStorage.getItem('fame_neon_speed')) || 5;
-    
-    const neonColor = document.getElementById('neon-color');
-    const neonIntensity = document.getElementById('neon-intensity');
-    const neonSpeed = document.getElementById('neon-speed');
-    
-    if (neonColor) neonColor.value = savedNeonColor;
-    if (neonIntensity) neonIntensity.value = savedNeonIntensity * 100;
-    if (neonSpeed) neonSpeed.value = savedNeonSpeed;
-    
-    applyNeonSettings(savedNeonColor, savedNeonIntensity, savedNeonSpeed);
-    
-    const savedNeonFlow = localStorage.getItem('fame_neon_flow');
-    const neonFlowCheckbox = document.getElementById('neon-flow-effect');
-    if (neonFlowCheckbox) {
-        if (savedNeonFlow === 'disabled') {
-            neonFlowCheckbox.checked = false;
-            removeNeonFlow();
-        } else {
-            neonFlowCheckbox.checked = true;
-        }
-    }
-    
-    const savedSnow = localStorage.getItem('fame_snow');
-    const snowCheckbox = document.getElementById('snow-effect');
-    if (snowCheckbox) {
-        if (savedSnow === 'disabled') {
-            snowCheckbox.checked = false;
-            const snowContainer = document.querySelector('.snow-container');
-            if (snowContainer) snowContainer.style.display = 'none';
-        } else {
-            snowCheckbox.checked = true;
-        }
-    }
-}
-
-function applyTheme(theme) {
-    currentTheme = theme;
-    
-    const themeClasses = ['dark-theme', 'black-theme', 'red-theme', 'red-black-theme', 
-                         'red-gray-theme', 'purple-theme', 'blue-theme', 'green-theme', 
-                         'orange-theme', 'pink-theme'];
-    
-    document.body.classList.remove(...themeClasses);
-    document.body.classList.add(theme + '-theme');
-    
-    localStorage.setItem('fame_theme', theme);
-}
-
-window.copyProfileLink = function(username) {
-    const link = `https://t.me/NOOLSHY?text=Профиль%20${encodeURIComponent(username)}%20на%20NoolShy%20Fame`;
-    navigator.clipboard.writeText(link).then(() => {
-        alert('Ссылка на профиль скопирована в буфер обмена!');
-    });
-};
-
-document.getElementById('snow-effect')?.addEventListener('change', function() {
-    localStorage.setItem('fame_snow', this.checked ? 'enabled' : 'disabled');
-});
-
-document.getElementById('neon-flow-effect')?.addEventListener('change', function() {
-    localStorage.setItem('fame_neon_flow', this.checked ? 'enabled' : 'disabled');
-    if (this.checked) {
-        initDynamicNeon();
-    } else {
-        removeNeonFlow();
-    }
-});
-
-function switchSection(sectionId) {
-    console.log('Переключение секции:', sectionId);
-    
-    document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active-section');
-    });
-    
-    const targetSection = document.getElementById(sectionId);
-    if (targetSection) {
-        targetSection.classList.add('active-section');
-    }
-    
-    document.querySelectorAll('.nav-tab').forEach(tab => {
-        tab.classList.remove('active');
-        if (tab.dataset.section === sectionId) {
-            tab.classList.add('active');
-        }
-    });
-}
-
-function initParallaxOnCards() {
-    document.addEventListener('mousemove', function(e) {
-        const cards = document.querySelectorAll('.member-card:hover .member-avatar img');
-        
-        cards.forEach(img => {
-            const rect = img.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            
-            img.style.transform = `scale(1.2) translate(${x * 8}px, ${y * 8}px)`;
-        });
-    });
+.filter-btn {
+    flex: 1 1 auto;
+    min-width: 120px;
+    text-align: center;
+    white-space: nowrap;
 }
