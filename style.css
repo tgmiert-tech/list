@@ -1354,7 +1354,6 @@ input:checked + .slider:before {
     text-align: center;
     white-space: nowrap;
 }
-/* НОВЫЕ СТИЛИ ДЛЯ ПРОФИЛЯ (как на скриншоте) */
 .profile-top {
     display: flex;
     align-items: center;
