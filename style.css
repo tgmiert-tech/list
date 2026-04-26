@@ -1581,7 +1581,7 @@ transform: scale(1.2);
     left: 0;
     right: 0;
 
-    height: 50%; /* 🔥 половина карточки */
+    height: 40%; /* 🔥 половина карточки */
 
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
