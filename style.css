@@ -1550,16 +1550,14 @@ transform: scale(1.2);
     position: relative;
     z-index: 3;
 }
-.member-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.2),
-        rgba(0,0,0,0.6)
-    );
+.member-card {
+    position: relative;
+    width: 220px;
+    height: 260px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+}
 
     z-index: 2;
 }
@@ -1575,36 +1573,34 @@ transform: scale(1.2);
     width: 100%;
     height: 100%;
     object-fit: cover;
-
-    filter: blur(12px) brightness(0.7); /* ВАЖНО: не тёмный */
-    transform: scale(1.15);
 }
 .card-blur {
-    top: 22px;
+    position: absolute;
+    top: 12px;
     left: 12px;
     right: 12px;
-    height: 28px;
+    height: 40px;
 
-    backdrop-filter: blur(10px);
+    border-radius: 12px;
+
+    backdrop-filter: blur(15px);
     background: rgba(255,255,255,0.08);
 
-    border-radius: 8px;
+    z-index: 2;
 }
 
-/* аватар */
 .card-avatar {
     position: absolute;
-    top: 36px; /* ВАЖНО: теперь ровно в центр полоски */
+    top: 32px;
     left: 50%;
     transform: translateX(-50%);
 
-    width: 36px;
-    height: 36px;
-
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid white;
 
+    border: 2px solid white;
     z-index: 3;
 }
 
@@ -1614,16 +1610,30 @@ transform: scale(1.2);
     object-fit: cover;
 }
 
-/* ВАЖНО: текст */
 .card-content {
     position: absolute;
-    bottom: 8px;
-    left: 10px;
-    right: 10px;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
 
-    color: white;
     z-index: 3;
+    color: white;
+}
+
+.card-content h3 {
+    font-size: 14px;
+    margin: 0 0 6px;
+}
+
+.card-content .role {
     font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 6px;
+}
+
+.card-content p {
+    font-size: 11px;
+    opacity: 0.6;
 }
 .card-avatar,
 .card-content,
