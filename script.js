@@ -1,8 +1,8 @@
 const members = [
     {
         id: 1,
-        nickname: "мирок",
-        username: "@tgmirok",
+        nickname: "миерк",
+        username: "@tgmierk",
         category: "Модерация",
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
