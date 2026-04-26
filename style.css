@@ -1554,10 +1554,7 @@ transform: scale(1.2);
     position: relative;
     width: 220px;
     height: 260px;
-    border-radius: 16px;
     overflow: hidden;
-
-    isolation: isolate; /* 🔥 ВАЖНО */
 }
 
     z-index: 2;
@@ -1568,10 +1565,13 @@ transform: scale(1.2);
     top: 0;
     left: 0;
     right: 0;
-    height: 40%;
+
+    height: 40%; /* 🔥 ВОТ КЛЮЧ */
 
     overflow: hidden;
     border-radius: 16px 16px 0 0;
+
+    z-index: 1;
 }
 
 .card-bg img {
@@ -1579,15 +1579,15 @@ transform: scale(1.2);
     height: 100%;
 
     object-fit: cover;
-    object-position: center;
 
-    filter: blur(20px); /* 🔥 ВОТ ГЛАВНОЕ */
-    transform: scale(1.2); /* чтобы не было краёв после blur */
+    filter: blur(20px);
+    transform: scale(1.2);
 }
 .card-bg::after {
     content: "";
     position: absolute;
     inset: 0;
+
     background: rgba(0,0,0,0.4);
 }
 .card-blur {
