@@ -543,18 +543,32 @@ badgesHtml += `<span class="badge category">${member.category}</span>`;
     
     const profileAvatarId = `profile-avatar-${member.id}`;
     
-    container.innerHTML = `
+   container.innerHTML = `
         <div class="profile-header">
-            <div class="profile-avatar" data-initial="${member.nickname.charAt(0).toUpperCase()}">
+            <div class="profile-avatar-wrapper">
                 <img id="${profileAvatarId}" 
                      src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
                      alt="${member.nickname}"
                      loading="eager">
             </div>
             
-            <h1 class="profile-title">${member.nickname}</h1>
-            <p class="profile-username">${member.username}</p>
+            <div class="profile-info-block">
+                <h1 class="profile-title">${member.nickname}</h1>
+                <p class="profile-username">${member.username}</p>
+                
+                <div class="profile-badges">
+                    ${badgesHtml}
+                </div>
+            </div>
             
+            <div class="profile-actions profile-actions-top">
+                ${mainButtons}
+                <button class="action-btn" onclick="copyProfileLink('${member.nickname}')">
+                    <i class="fas fa-share"></i> Поделиться
+                </button>
+            </div>
+        </div>
+    `;
             <div class="profile-badges">
                 ${badgesHtml}
             </div>
