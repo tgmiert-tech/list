@@ -1556,7 +1556,8 @@ transform: scale(1.2);
     height: 260px;
     border-radius: 16px;
     overflow: hidden;
-    background: rgba(255,255,255,0.05);
+
+    isolation: isolate; /* 🔥 ВАЖНО */
 }
 
     z-index: 2;
