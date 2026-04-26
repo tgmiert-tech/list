@@ -305,7 +305,6 @@ function initMembers() {
     } else {
         console.error('Поле поиска не найдено');
     }
-        initParallaxOnCards();
 }
 
 
