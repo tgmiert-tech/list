@@ -7,7 +7,6 @@ const members = [
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
         avatar: "img/avatar1.jpg",
-        hoverAvatar: "img/avatar1.gif", 
         verified: true,
         pinned: true,
         project: "https://t.me/+hgYBTlhzZOZmNDY0",
