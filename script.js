@@ -333,27 +333,27 @@ function loadMembers() {
     
 members.forEach(member => {
 
-    const card = `
-    <div class="member-card">
+const card = `
+<div class="member-card">
 
-        <div class="card-bg">
-            <img src="img/avatar${member.id}.jpg">
-        </div>
-
-        <div class="card-blur"></div>
-
-        <div class="card-avatar">
-            <img src="img/avatar${member.id}.jpg">
-        </div>
-
-        <div class="card-content">
-            <h3>${member.nickname} ✓</h3>
-            <div class="role">Владелец</div>
-            <p>Владелец листа. вход бесплатно / галочка</p>
-        </div>
-
+    <div class="card-bg">
+        <img src="img/avatar${member.id}.jpg">
     </div>
-    `;
+
+    <div class="card-blur"></div>
+
+    <div class="card-avatar">
+        <img src="img/avatar${member.id}.jpg">
+    </div>
+
+    <div class="card-content">
+        <h3>${member.nickname} ✓</h3>
+        <div class="role">${member.role}</div>
+        <p>${member.description}</p>
+    </div>
+
+</div>
+`;
 
     container.innerHTML += card;
 });
