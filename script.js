@@ -349,6 +349,102 @@ function loadMembers() {
 }
 
 
+function createMemberCard(member) {
+    const card = document.createElement('div');
+    card.className = 'member-card';
+    card.dataset.id = member.id;
+    card.dataset.category = member.category;
+    
+    if (member.scam) card.classList.add('scam');
+    else if (member.pinned) card.classList.add('pinned');
+    if (member.verified && !member.scam) card.classList.add('verified');
+  
+    const avatarId = `avatar-${member.id}`;
+    
+card.innerHTML = `
+    <div class="member-avatar" data-initial="${member.nickname.charAt(0).toUpperCase()}">
+        <img id="${avatarId}" 
+             src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI5MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
+             alt="${member.nickname}"
+             loading="lazy">
+    </div>
+    
+    <div class="member-info">
+        <h3>${member.nickname} ${member.scam ? '⚠️' : (member.verified ? '✓' : '')}</h3>
+        <div class="member-role">${member.role}</div>
+        <p class="member-description">${member.description}</p>
+        <div class="member-badges">
+            ${member.scam ? '⚠️ ' : ''}${member.pinned ? '📍 ' : ''}${member.verified ? '✓ ' : ''}${member.category}
+        </div>
+    </div>
+`;
+    
+  
+    setTimeout(() => {
+        const img = card.querySelector(`#${avatarId}`);
+        if (img) {
+            loadAvatarWithFallback(img, `img/avatar${member.id}.jpg`, member.nickname);
+        }
+    }, 10);
+    
+    return card;
+}
+
+
+function filterMembers(category) {
+    const cards = document.querySelectorAll('.member-card');
+    console.log('Фильтрация участников по категории:', category, 'найдено карточек:', cards.length);
+    
+    cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'block';
+            setTimeout(() => {
+                card.style.opacity = '1';
+            }, 10);
+        } else {
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.style.display = 'none';
+            }, 300);
+        }
+    });
+}
+
+function searchMembers(term) {
+    const cards = document.querySelectorAll('.member-card');
+    const activeFilter = document.querySelector('.filter-btn.active')?.dataset.category || 'all';
+    
+    cards.forEach(card => {
+        const nickname = card.querySelector('h3').textContent.toLowerCase();
+        const description = card.querySelector('.member-description').textContent.toLowerCase();
+        
+        const matchesSearch = nickname.includes(term) || description.includes(term);
+        const matchesFilter = activeFilter === 'all' || card.dataset.category === activeFilter;
+        
+        if (matchesSearch && matchesFilter) {
+            card.style.display = 'block';
+            setTimeout(() => {
+                card.style.opacity = '1';
+            }, 10);
+        } else {
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.style.display = 'none';
+            }, 300);
+        }
+    });
+}
+
+function createSocialButton(icon, text, url, className = '') {
+    if (!url) return '';
+    return `
+        <a href="${url}" class="action-btn ${className}" target="_blank">
+            <i class="${icon}"></i> ${text}
+        </a>
+    `;
+}
+
+
 function showProfile(memberId) {
     const member = members.find(m => m.id == memberId);
     if (!member) {
@@ -445,66 +541,58 @@ badgesHtml += `<span class="badge category">${member.category}</span>`;
         }
     });
     
-    // ===== НОВЫЙ ДИЗАЙН ПРОФИЛЯ КАК НА ФОТО =====
     const profileAvatarId = `profile-avatar-${member.id}`;
     
     container.innerHTML = `
-        <div class="profile-new-container">
-            <!-- Верхняя часть с аватаром и информацией -->
-            <div class="profile-top">
-                <div class="profile-avatar-new" data-initial="${member.nickname.charAt(0).toUpperCase()}">
-                    <img id="${profileAvatarId}" 
-                         src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
-                         alt="${member.nickname}"
-                         loading="eager">
-                </div>
-                
-                <div class="profile-info-new">
-                    <h1 class="profile-name-new">${member.nickname}</h1>
-                    <p class="profile-username-new">${member.username}</p>
-                    <div class="profile-badges-new">
-                        ${badgesHtml}
-                    </div>
-                </div>
+        <div class="profile-header">
+            <div class="profile-avatar" data-initial="${member.nickname.charAt(0).toUpperCase()}">
+                <img id="${profileAvatarId}" 
+                     src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
+                     alt="${member.nickname}"
+                     loading="eager">
             </div>
             
-            <!-- Кнопки действий -->
-            <div class="profile-actions-new">
+            <h1 class="profile-title">${member.nickname}</h1>
+            <p class="profile-username">${member.username}</p>
+            
+            <div class="profile-badges">
+                ${badgesHtml}
+            </div>
+            
+            <div class="profile-actions">
                 ${mainButtons}
-                ${extraButtons}
-                <button class="action-btn-new" onclick="copyProfileLink('${member.nickname}')">
+                <button class="action-btn" onclick="copyProfileLink('${member.nickname}')">
                     <i class="fas fa-share"></i> Поделиться
                 </button>
             </div>
-            
-            <!-- Описание -->
-            <div class="profile-description-new">
+        </div>
+        
+        <div class="profile-content">
+            <div class="profile-description">
                 <h3>Описание</h3>
                 <p>${member.description || 'Нет описания'}</p>
+                
+                ${member.details ? `
+                    <h3 style="margin-top: 30px;">Детали</h3>
+                    <p>${member.details}</p>
+                ` : ''}
+                
+                ${member.skills && member.skills.length > 0 ? `
+                    <h3 style="margin-top: 30px;">Навыки и специализация</h3>
+                    <p>${member.skills.join(' • ')}</p>
+                ` : ''}
+                
+                ${extraButtons ? `
+                    <h3 style="margin-top: 30px;">Дополнительные ссылки</h3>
+                    <div class="profile-actions">
+                        ${extraButtons}
+                    </div>
+                ` : ''}
             </div>
             
-            <!-- Детали -->
-            ${member.details ? `
-                <div class="profile-details-new">
-                    <h3>Детали</h3>
-                    <p>${member.details}</p>
-                </div>
-            ` : ''}
-            
-            <!-- Навыки -->
-            ${member.skills && member.skills.length > 0 ? `
-                <div class="profile-skills-new">
-                    <h3>Навыки и специализация</h3>
-                    <p>${member.skills.join(' • ')}</p>
-                </div>
-            ` : ''}
-            
-            <!-- Статистика -->
-            <div class="profile-stats-new">
+            <div class="profile-stats">
                 <h3>Статистика</h3>
-                <div class="stats-grid-new">
-                    ${statsHtml}
-                </div>
+                ${statsHtml}
             </div>
         </div>
     `;
