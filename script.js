@@ -1092,3 +1092,25 @@ function switchSection(sectionId) {
         }
     });
 }
+function initParallaxOnCards() {
+    document.addEventListener('mousemove', function(e) {
+        const cards = document.querySelectorAll('.member-card:hover .member-avatar img');
+        const profileAvatar = document.querySelector('.profile-header:hover .profile-avatar img');
+        
+        cards.forEach(img => {
+            const rect = img.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            
+            img.style.transform = `scale(1.2) translate(${x * 8}px, ${y * 8}px)`;
+        });
+        
+        if (profileAvatar) {
+            const rect = profileAvatar.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            
+            profileAvatar.style.transform = `scale(1.15) translate(${x * 10}px, ${y * 10}px)`;
+        }
+    });
+}
