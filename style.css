@@ -1619,10 +1619,13 @@ transform: scale(1.2);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
 
-    background: rgba(0,0,0,0.25);
-
-    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    /* 🔥 ВОТ ГЛАВНОЕ */
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.2) 0%,
+        rgba(0,0,0,0.5) 60%,
+        rgba(0,0,0,0.9) 100%
+    );
 
     z-index: 2;
 }
