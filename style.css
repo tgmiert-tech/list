@@ -1566,7 +1566,7 @@ transform: scale(1.2);
     left: 0;
     right: 0;
 
-    height: 40%; /* 🔥 ВОТ КЛЮЧ */
+    height: 27%; /* 🔥 ВОТ КЛЮЧ */
 
     overflow: hidden;
     border-radius: 16px 16px 0 0;
