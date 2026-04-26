@@ -1,8 +1,8 @@
 const members = [
     {
         id: 1,
-        nickname: "миерк",
-        username: "@tgmierk",
+        nickname: "мирок",
+        username: "@tgmirok",
         category: "Модерация",
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
@@ -331,32 +331,10 @@ function loadMembers() {
         return 0;
     });
     
-members.forEach(member => {
-
-const card = `
-<div class="member-card">
-
-    <div class="card-bg">
-        <img src="img/avatar${member.id}.jpg">
-    </div>
-
-    <div class="card-blur"></div>
-
-    <div class="card-avatar">
-        <img src="img/avatar${member.id}.jpg">
-    </div>
-
-    <div class="card-content">
-        <h3>${member.nickname} ✓</h3>
-        <div class="role">${member.role}</div>
-        <p>${member.description}</p>
-    </div>
-
-</div>
-`;
-
-    container.innerHTML += card;
-});
+    sortedMembers.forEach(member => {
+        const card = createMemberCard(member);
+        container.appendChild(card);
+    });
     
    
     document.querySelectorAll('.member-card').forEach(card => {
@@ -565,27 +543,22 @@ badgesHtml += `<span class="badge category">${member.category}</span>`;
     
     const profileAvatarId = `profile-avatar-${member.id}`;
     
-container.innerHTML = `
-    <div class="profile-header">
-        
-        <div class="profile-bg">
-            <img src="img/avatar${member.id}.jpg" class="bg-image">
-        </div>
-
-        <div class="profile-overlay"></div>
-
-        <div class="profile-header-content">
-            <div class="profile-avatar">
-                <img id="${profileAvatarId}" src="img/avatar${member.id}.jpg">
+    container.innerHTML = `
+        <div class="profile-header">
+            <div class="profile-avatar" data-initial="${member.nickname.charAt(0).toUpperCase()}">
+                <img id="${profileAvatarId}" 
+                     src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
+                     alt="${member.nickname}"
+                     loading="eager">
             </div>
-
+            
             <h1 class="profile-title">${member.nickname}</h1>
             <p class="profile-username">${member.username}</p>
-
+            
             <div class="profile-badges">
                 ${badgesHtml}
             </div>
-
+            
             <div class="profile-actions">
                 ${mainButtons}
                 <button class="action-btn" onclick="copyProfileLink('${member.nickname}')">
@@ -593,38 +566,36 @@ container.innerHTML = `
                 </button>
             </div>
         </div>
-    </div>
-
-    <!-- ЭТО НЕ УДАЛЯЙ -->
-    <div class="profile-content">
-        <div class="profile-description">
-            <h3>Описание</h3>
-            <p>${member.description || 'Нет описания'}</p>
-            
-            ${member.details ? `
-                <h3 style="margin-top: 30px;">Детали</h3>
-                <p>${member.details}</p>
-            ` : ''}
-            
-            ${member.skills && member.skills.length > 0 ? `
-                <h3 style="margin-top: 30px;">Навыки и специализация</h3>
-                <p>${member.skills.join(' • ')}</p>
-            ` : ''}
-            
-            ${extraButtons ? `
-                <h3 style="margin-top: 30px;">Дополнительные ссылки</h3>
-                <div class="profile-actions">
-                    ${extraButtons}
-                </div>
-            ` : ''}
-        </div>
         
-        <div class="profile-stats">
-            <h3>Статистика</h3>
-            ${statsHtml}
+        <div class="profile-content">
+            <div class="profile-description">
+                <h3>Описание</h3>
+                <p>${member.description || 'Нет описания'}</p>
+                
+                ${member.details ? `
+                    <h3 style="margin-top: 30px;">Детали</h3>
+                    <p>${member.details}</p>
+                ` : ''}
+                
+                ${member.skills && member.skills.length > 0 ? `
+                    <h3 style="margin-top: 30px;">Навыки и специализация</h3>
+                    <p>${member.skills.join(' • ')}</p>
+                ` : ''}
+                
+                ${extraButtons ? `
+                    <h3 style="margin-top: 30px;">Дополнительные ссылки</h3>
+                    <div class="profile-actions">
+                        ${extraButtons}
+                    </div>
+                ` : ''}
+            </div>
+            
+            <div class="profile-stats">
+                <h3>Статистика</h3>
+                ${statsHtml}
+            </div>
         </div>
-    </div>
-`;
+    `;
     
 
     setTimeout(() => {
