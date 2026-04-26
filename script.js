@@ -341,73 +341,130 @@ function loadMembers() {
         card.addEventListener('click', function() {
             const memberId = this.dataset.id;
             console.log('Клик по участнику:', memberId);
-            showProfile(memberId);
-        });
+function showProfile(memberId) {
+    const member = members.find(m => m.id == memberId);
+    if (!member) {
+        console.error('Участник не найден:', memberId);
+        return;
+    }
+    
+    const container = document.getElementById('profile-content');
+    if (!container) {
+        console.error('Контейнер профиля не найден');
+        return;
+    }
+    
+    const joinDate = new Date(member.joinDate);
+    const formattedDate = joinDate.toLocaleDateString('ru-RU', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     });
     
-    console.log('Участники загружены:', sortedMembers.length);
-}
-
-
-function createMemberCard(member) {
-    const card = document.createElement('div');
-    card.className = 'member-card';
-    card.dataset.id = member.id;
-    card.dataset.category = member.category;
+    let badgesHtml = '';
+    if (member.scam) {
+        badgesHtml += '<span class="badge scam">⚠️ Скам (Осторожно!)</span>';
+    } else if (member.verified) {
+        badgesHtml += '<span class="badge verified">✓ Верифицирован</span>';
+    }
+    if (member.pinned) badgesHtml += '<span class="badge pinned">📌 Закреплён</span>';
+    badgesHtml += `<span class="badge category">${member.category}</span>`;
     
-    if (member.scam) card.classList.add('scam');
-    else if (member.pinned) card.classList.add('pinned');
-    if (member.verified && !member.scam) card.classList.add('verified');
-  
-    const avatarId = `avatar-${member.id}`;
+    const profileAvatarId = `profile-avatar-${member.id}`;
     
-card.innerHTML = `
-    <div class="member-avatar" data-initial="${member.nickname.charAt(0).toUpperCase()}">
-        <img id="${avatarId}" 
-             src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI5MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
-             alt="${member.nickname}"
-             loading="lazy">
-    </div>
-    
-    <div class="member-info">
-        <h3>${member.nickname} ${member.scam ? '⚠️' : (member.verified ? '✓' : '')}</h3>
-        <div class="member-role">${member.role}</div>
-        <p class="member-description">${member.description}</p>
-        <div class="member-badges">
-            ${member.scam ? '⚠️ ' : ''}${member.pinned ? '📍 ' : ''}${member.verified ? '✓ ' : ''}${member.category}
+    container.innerHTML = `
+        <div class="profile-card-new">
+            <div class="profile-top">
+                <div class="profile-avatar-new" data-initial="${member.nickname.charAt(0).toUpperCase()}">
+                    <img id="${profileAvatarId}" 
+                         src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
+                         alt="${member.nickname}"
+                         loading="eager">
+                </div>
+                <div class="profile-info-new">
+                    <h1 class="profile-name-new">${member.nickname}</h1>
+                    <p class="profile-username-new">${member.username}</p>
+                    <div class="profile-badges-new">
+                        ${badgesHtml}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-actions-new">
+                ${member.telegram ? `
+                <a href="https://t.me/${member.telegram}" class="action-btn-new telegram" target="_blank">
+                    <i class="fab fa-telegram"></i> Написать в ЛС
+                </a>` : ''}
+                ${member.project ? `
+                <a href="${member.project}" class="action-btn-new" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Основной канал
+                </a>` : ''}
+                ${member.chat ? `
+                <a href="${member.chat}" class="action-btn-new" target="_blank">
+                    <i class="fas fa-comments"></i> Чат
+                </a>` : ''}
+                <button class="action-btn-new" onclick="copyProfileLink('${member.nickname}')">
+                    <i class="fas fa-share"></i> Поделиться
+                </button>
+            </div>
+            
+            <div class="profile-description-new">
+                <h3>Описание</h3>
+                <p>${member.description || 'Нет описания'}</p>
+            </div>
+            
+            ${member.details ? `
+            <div class="profile-details-new">
+                <h3>Детали</h3>
+                <p>${member.details}</p>
+            </div>` : ''}
+            
+            ${member.skills && member.skills.length > 0 ? `
+            <div class="profile-skills-new">
+                <h3>Навыки и специализация</h3>
+                <p>${member.skills.join(' • ')}</p>
+            </div>` : ''}
+            
+            <div class="profile-stats-new">
+                <h3>Статистика</h3>
+                <div class="stats-grid-new">
+                    <div class="stat-item-new">
+                        <span class="stat-label-new">Статус:</span>
+                        <span class="stat-value-new">${member.role}</span>
+                    </div>
+                    <div class="stat-item-new">
+                        <span class="stat-label-new">Верификация:</span>
+                        <span class="stat-value-new">${member.verified ? '✓ Подтверждён' : '✗ Не подтверждён'}</span>
+                    </div>
+                    <div class="stat-item-new">
+                        <span class="stat-label-new">Закреп:</span>
+                        <span class="stat-value-new">${member.pinned ? '📌 Включён' : '✗ Выключен'}</span>
+                    </div>
+                    <div class="stat-item-new">
+                        <span class="stat-label-new">Дата регистрации:</span>
+                        <span class="stat-value-new">${formattedDate}</span>
+                    </div>
+                    <div class="stat-item-new">
+                        <span class="stat-label-new">Активность:</span>
+                        <span class="stat-value-new">${member.activity}</span>
+                    </div>
+                    <div class="stat-item-new">
+                        <span class="stat-label-new">ID:</span>
+                        <span class="stat-value-new">${member.id}</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-`;
+    `;
     
-  
     setTimeout(() => {
-        const img = card.querySelector(`#${avatarId}`);
+        const img = document.getElementById(profileAvatarId);
         if (img) {
             loadAvatarWithFallback(img, `img/avatar${member.id}.jpg`, member.nickname);
         }
     }, 10);
     
-    return card;
-}
-
-
-function filterMembers(category) {
-    const cards = document.querySelectorAll('.member-card');
-    console.log('Фильтрация участников по категории:', category, 'найдено карточек:', cards.length);
-    
-    cards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-            card.style.display = 'block';
-            setTimeout(() => {
-                card.style.opacity = '1';
-            }, 10);
-        } else {
-            card.style.opacity = '0';
-            setTimeout(() => {
-                card.style.display = 'none';
-            }, 300);
-        }
-    });
+    switchSection('profile-details');
 }
 
 function searchMembers(term) {
