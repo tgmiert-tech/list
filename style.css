@@ -1577,17 +1577,20 @@ transform: scale(1.2);
 }
 .card-blur {
     position: absolute;
-    top: 12px;
-    left: 12px;
-    right: 12px;
-    height: 40px;
+    top: 0;
+    left: 0;
+    right: 0;
 
-    border-radius: 12px;
+    height: 50%; /* 🔥 половина карточки */
 
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px); /* для браузеров */
+    -webkit-backdrop-filter: blur(20px);
 
     background: rgba(255,255,255,0.05);
+
+    /* 🔥 ВАЖНО — плавное исчезновение */
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 
     z-index: 2;
 }
