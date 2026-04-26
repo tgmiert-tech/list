@@ -341,110 +341,144 @@ function loadMembers() {
         card.addEventListener('click', function() {
             const memberId = this.dataset.id;
             console.log('Клик по участнику:', memberId);
-            showProfile(memberId);
-        });
+function showProfile(memberId) {
+    const member = members.find(m => m.id == memberId);
+    if (!member) {
+        console.error('Участник не найден:', memberId);
+        return;
+    }
+    
+    const container = document.getElementById('profile-content');
+    if (!container) {
+        console.error('Контейнер профиля не найден');
+        return;
+    }
+    
+    const joinDate = new Date(member.joinDate);
+    const formattedDate = joinDate.toLocaleDateString('ru-RU', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     });
     
-    console.log('Участники загружены:', sortedMembers.length);
-}
-
-
-function createMemberCard(member) {
-    const card = document.createElement('div');
-    card.className = 'member-card';
-    card.dataset.id = member.id;
-    card.dataset.category = member.category;
+    // Бейджи
+    let badgesHtml = '';
+    if (member.scam) {
+        badgesHtml += '<span class="badge scam">⚠️ Скам (Осторожно!)</span>';
+    } else if (member.verified) {
+        badgesHtml += '<span class="badge verified">✓ Верифицирован</span>';
+    }
+    if (member.pinned) badgesHtml += '<span class="badge pinned">📌 Закреплён</span>';
+    badgesHtml += `<span class="badge category">${member.category}</span>`;
     
-    if (member.scam) card.classList.add('scam');
-    else if (member.pinned) card.classList.add('pinned');
-    if (member.verified && !member.scam) card.classList.add('verified');
-  
-    const avatarId = `avatar-${member.id}`;
+    // Кнопки действий (новые классы)
+    let actionButtons = createSocialButton('fab fa-telegram', 'Написать в ЛС', `https://t.me/${member.telegram}`, 'telegram');
+    if (member.project) actionButtons += createSocialButton('fas fa-external-link-alt', 'Основной канал', member.project);
+    if (member.chat) actionButtons += createSocialButton('fas fa-comments', 'Чат', member.chat);
+    // Кнопка "Поделиться"
+    actionButtons += `
+        <button class="action-btn-new" onclick="copyProfileLink('${member.nickname}')">
+            <i class="fas fa-share"></i> Поделиться
+        </button>
+    `;
     
-card.innerHTML = `
-    <div class="member-avatar" data-initial="${member.nickname.charAt(0).toUpperCase()}">
-        <img id="${avatarId}" 
-             src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI5MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
-             alt="${member.nickname}"
-             loading="lazy">
-    </div>
+    // Статистика (оставим, если нужна)
+    const stats = {
+        'Статус': member.role,
+        'Верификация': member.verified ? '✓ Подтверждён' : '✗ Не подтверждён',
+        'Закреп': member.pinned ? '📌 Включён' : '✗ Выключен',
+        'Дата регистрации': formattedDate,
+        'Активность': member.activity,
+        'Подписчики': member.followers,
+        'ID': member.id
+    };
+    if (member.priceEntry) stats['Цена входа'] = member.priceEntry;
+    if (member.priceVerified) stats['Цена галочки'] = member.priceVerified;
+    if (member.pricePinned) stats['Цена закрепа'] = member.pricePinned;
     
-    <div class="member-info">
-        <h3>${member.nickname} ${member.scam ? '⚠️' : (member.verified ? '✓' : '')}</h3>
-        <div class="member-role">${member.role}</div>
-        <p class="member-description">${member.description}</p>
-        <div class="member-badges">
-            ${member.scam ? '⚠️ ' : ''}${member.pinned ? '📍 ' : ''}${member.verified ? '✓ ' : ''}${member.category}
+    let statsHtml = '';
+    Object.entries(stats).forEach(([label, value]) => {
+        if (value) {
+            statsHtml += `
+                <div class="stat-item-new">
+                    <span class="stat-label-new">${label}:</span>
+                    <span class="stat-value-new">${value}</span>
+                </div>
+            `;
+        }
+    });
+    
+    const profileAvatarId = `profile-avatar-${member.id}`;
+    
+    // Новая структура профиля
+    container.innerHTML = `
+        <div class="profile-header">
+            <!-- Верхний блок: аватар + основная информация -->
+            <div class="profile-top">
+                <div class="profile-avatar-new" data-initial="${member.nickname.charAt(0).toUpperCase()}">
+                    <img id="${profileAvatarId}" 
+                         src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+"
+                         alt="${member.nickname}">
+                </div>
+                <div class="profile-info-new">
+                    <h1 class="profile-name-new">${member.nickname}</h1>
+                    <div class="profile-username-new">${member.username}</div>
+                    <div class="profile-badges-new">
+                        ${badgesHtml}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Кнопки действий -->
+            <div class="profile-actions-new">
+                ${actionButtons}
+            </div>
+            
+            <!-- Описание -->
+            <div class="profile-description-new">
+                <h3>Описание</h3>
+                <p>${member.description || 'Нет описания'}</p>
+            </div>
+            
+            <!-- Детали -->
+            ${member.details ? `
+            <div class="profile-details-new">
+                <h3>Детали</h3>
+                <p>${member.details}</p>
+            </div>` : ''}
+            
+            <!-- Навыки и специализация -->
+            ${member.skills && member.skills.length > 0 ? `
+            <div class="profile-skills-new">
+                <h3>Навыки и специализация</h3>
+                <p>${member.skills.join(' • ')}</p>
+            </div>` : ''}
+            
+            <!-- Статистика (опционально) -->
+            <div class="profile-stats-new">
+                <h3>Статистика</h3>
+                <div class="stats-grid-new">
+                    ${statsHtml}
+                </div>
+            </div>
         </div>
-    </div>
-`;
+    `;
     
-  
+    // Загрузка аватарки
     setTimeout(() => {
-        const img = card.querySelector(`#${avatarId}`);
+        const img = document.getElementById(profileAvatarId);
         if (img) {
             loadAvatarWithFallback(img, `img/avatar${member.id}.jpg`, member.nickname);
         }
     }, 10);
     
-    return card;
+    // Переключиться на секцию профиля
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+    const profileSection = document.getElementById('profile-details');
+    if (profileSection) {
+        profileSection.classList.add('active-section');
+    }
 }
-
-
-function filterMembers(category) {
-    const cards = document.querySelectorAll('.member-card');
-    console.log('Фильтрация участников по категории:', category, 'найдено карточек:', cards.length);
-    
-    cards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-            card.style.display = 'block';
-            setTimeout(() => {
-                card.style.opacity = '1';
-            }, 10);
-        } else {
-            card.style.opacity = '0';
-            setTimeout(() => {
-                card.style.display = 'none';
-            }, 300);
-        }
-    });
-}
-
-function searchMembers(term) {
-    const cards = document.querySelectorAll('.member-card');
-    const activeFilter = document.querySelector('.filter-btn.active')?.dataset.category || 'all';
-    
-    cards.forEach(card => {
-        const nickname = card.querySelector('h3').textContent.toLowerCase();
-        const description = card.querySelector('.member-description').textContent.toLowerCase();
-        
-        const matchesSearch = nickname.includes(term) || description.includes(term);
-        const matchesFilter = activeFilter === 'all' || card.dataset.category === activeFilter;
-        
-        if (matchesSearch && matchesFilter) {
-            card.style.display = 'block';
-            setTimeout(() => {
-                card.style.opacity = '1';
-            }, 10);
-        } else {
-            card.style.opacity = '0';
-            setTimeout(() => {
-                card.style.display = 'none';
-            }, 300);
-        }
-    });
-}
-
-function createSocialButton(icon, text, url, className = '') {
-    if (!url) return '';
-    return `
-        <a href="${url}" class="action-btn ${className}" target="_blank">
-            <i class="${icon}"></i> ${text}
-        </a>
-    `;
-}
-
-
 function showProfile(memberId) {
     const member = members.find(m => m.id == memberId);
     if (!member) {
