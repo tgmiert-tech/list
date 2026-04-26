@@ -1568,18 +1568,18 @@ transform: scale(1.2);
     top: 0;
     left: 0;
     right: 0;
-    height: 40%; /* регулируешь тут */
+    height: 40%; /* ← как ты хочешь */
 
-    overflow: hidden; /* 🔥 ОБЯЗАТЕЛЬНО */
-    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
 }
 
 .card-bg img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
 
-    transform: scale(0.7); /* 🔥 ВОТ ЭТО ГЛАВНОЕ */
+    object-fit: cover;       /* заполняет блок */
+    object-position: top;    /* 🔥 смещает вверх (важно!) */
 }
 .card-blur {
     position: absolute;
