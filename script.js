@@ -543,79 +543,59 @@ badgesHtml += `<span class="badge category">${member.category}</span>`;
     
     const profileAvatarId = `profile-avatar-${member.id}`;
     
-  container.innerHTML = `
-    <div class="profile-header">
-        <div class="profile-top">
-            <div class="profile-avatar-new" data-initial="${member.nickname.charAt(0).toUpperCase()}">
+    container.innerHTML = `
+        <div class="profile-header">
+            <div class="profile-avatar" data-initial="${member.nickname.charAt(0).toUpperCase()}">
                 <img id="${profileAvatarId}" 
                      src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9IiMzMzMzMzMiPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iNTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGR5PSIwLjM1ZW0iIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiPk48L3RleHQ+PC9zdmc+" 
                      alt="${member.nickname}"
                      loading="eager">
             </div>
-            <div class="profile-info-new">
-                <h1 class="profile-name-new">${member.nickname}</h1>
-                <p class="profile-username-new">${member.username}</p>
-                <div class="profile-badges-new">
-                    ${badgesHtml}
-                </div>
+            
+            <h1 class="profile-title">${member.nickname}</h1>
+            <p class="profile-username">${member.username}</p>
+            
+            <div class="profile-badges">
+                ${badgesHtml}
+            </div>
+            
+            <div class="profile-actions">
+                ${mainButtons}
+                <button class="action-btn" onclick="copyProfileLink('${member.nickname}')">
+                    <i class="fas fa-share"></i> Поделиться
+                </button>
             </div>
         </div>
         
-        <div class="profile-actions-new">
-            ${createSocialButton('fab fa-telegram', 'Написать в ЛС', `https://t.me/${member.telegram}`, 'telegram')}
-            ${member.project ? createSocialButton('fas fa-external-link-alt', 'Основной канал', member.project, 'telegram') : ''}
-            ${member.chat ? createSocialButton('fas fa-comments', 'Чат', member.chat, 'telegram') : ''}
-            <button class="action-btn-new" onclick="copyProfileLink('${member.nickname}')">
-                <i class="fas fa-share"></i> Поделиться
-            </button>
-        </div>
-        
-        <div class="profile-description-new">
-            <h3>Описание</h3>
-            <p>${member.description || 'Нет описания'}</p>
-        </div>
-        
-        <div class="profile-details-new">
-            <h3>Детали</h3>
-            <p>${member.details || 'Нет деталей'}</p>
-        </div>
-        
-        <div class="profile-skills-new">
-            <h3>Навыки и специализация</h3>
-            <p>${member.skills ? member.skills.join(' • ') : 'Нет навыков'}</p>
-        </div>
-        
-        <div class="profile-stats-new">
-            <h3>Статистика</h3>
-            <div class="stats-grid-new">
-                <div class="stat-item-new">
-                    <span class="stat-label-new">Статус:</span>
-                    <span class="stat-value-new">${member.role}</span>
-                </div>
-                <div class="stat-item-new">
-                    <span class="stat-label-new">Верификация:</span>
-                    <span class="stat-value-new">${member.verified ? '✔ Подтверждён' : '✗ Не подтверждён'}</span>
-                </div>
-                <div class="stat-item-new">
-                    <span class="stat-label-new">Закреп.:</span>
-                    <span class="stat-value-new">${member.pinned ? '✔ Включён' : '✗ Выключен'}</span>
-                </div>
-                <div class="stat-item-new">
-                    <span class="stat-label-new">Дата регистрации:</span>
-                    <span class="stat-value-new">${formattedDate}</span>
-                </div>
-                <div class="stat-item-new">
-                    <span class="stat-label-new">Активность:</span>
-                    <span class="stat-value-new">${member.activity}</span>
-                </div>
-                <div class="stat-item-new">
-                    <span class="stat-label-new">ID:</span>
-                    <span class="stat-value-new">${member.id}</span>
-                </div>
+        <div class="profile-content">
+            <div class="profile-description">
+                <h3>Описание</h3>
+                <p>${member.description || 'Нет описания'}</p>
+                
+                ${member.details ? `
+                    <h3 style="margin-top: 30px;">Детали</h3>
+                    <p>${member.details}</p>
+                ` : ''}
+                
+                ${member.skills && member.skills.length > 0 ? `
+                    <h3 style="margin-top: 30px;">Навыки и специализация</h3>
+                    <p>${member.skills.join(' • ')}</p>
+                ` : ''}
+                
+                ${extraButtons ? `
+                    <h3 style="margin-top: 30px;">Дополнительные ссылки</h3>
+                    <div class="profile-actions">
+                        ${extraButtons}
+                    </div>
+                ` : ''}
+            </div>
+            
+            <div class="profile-stats">
+                <h3>Статистика</h3>
+                ${statsHtml}
             </div>
         </div>
-    </div>
-`;
+    `;
     
 
     setTimeout(() => {
