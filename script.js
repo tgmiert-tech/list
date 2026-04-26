@@ -479,6 +479,14 @@ function showProfile(memberId) {
         profileSection.classList.add('active-section');
     }
 }
+            unction createSocialButton(icon, text, url, className = '') {
+    if (!url) return '';
+    return `
+        <a href="${url}" class="action-btn ${className}" target="_blank">
+            <i class="${icon}"></i> ${text}
+        </a>
+    `;
+}
 function showProfile(memberId) {
     const member = members.find(m => m.id == memberId);
     if (!member) {
