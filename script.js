@@ -331,10 +331,32 @@ function loadMembers() {
         return 0;
     });
     
-    sortedMembers.forEach(member => {
-        const card = createMemberCard(member);
-        container.appendChild(card);
-    });
+members.forEach(member => {
+
+    const card = `
+    <div class="member-card">
+
+        <div class="card-bg">
+            <img src="img/avatar${member.id}.jpg">
+        </div>
+
+        <div class="card-blur"></div>
+
+        <div class="card-avatar">
+            <img src="img/avatar${member.id}.jpg">
+        </div>
+
+        <div class="card-content">
+            <h3>${member.nickname} ✓</h3>
+            <div class="role">Владелец</div>
+            <p>Владелец листа. вход бесплатно / галочка</p>
+        </div>
+
+    </div>
+    `;
+
+    container.innerHTML += card;
+});
     
    
     document.querySelectorAll('.member-card').forEach(card => {
