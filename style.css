@@ -1584,6 +1584,12 @@ transform: scale(1.2);
     filter: blur(20px); /* 🔥 ВОТ ГЛАВНОЕ */
     transform: scale(1.2); /* чтобы не было краёв после blur */
 }
+.card-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+}
 .card-blur {
     position: absolute;
     top: 0;
