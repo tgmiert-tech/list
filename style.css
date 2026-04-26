@@ -1514,43 +1514,41 @@ input:checked + .slider:before {
     border-radius: 20px;
 }
 
-/* ФОН (аватарка) */
+.profile-header {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    min-height: 260px; /* важно */
+}
+
+/* ФОН */
 .profile-bg {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     z-index: 1;
+    overflow: hidden;
 }
 
 .profile-bg img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: blur(25px) brightness(0.5);
-    transform: scale(1.2);
+    object-position: center; /* центр как на 2 фото */
+    
+    filter: blur(40px) brightness(0.6);
+    transform: scale(1.3); /* чтобы не было пустых краёв */
 }
 
 /* затемнение */
 .profile-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.5);
     z-index: 2;
 }
 
-/* контент поверх */
+/* контент */
 .profile-header-content {
     position: relative;
     z-index: 3;
-}
-
-/* аватар поверх */
-.profile-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid #fff;
 }
