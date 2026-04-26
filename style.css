@@ -1576,7 +1576,7 @@ transform: scale(1.2);
 
 .card-bg img {
     width: 100%;
-    height: 40%; /* 🔥 ВОТ ЭТО МЕНЯЙ */
+    height: 100%; /* 🔥 ВОТ ЭТО МЕНЯЙ */
     object-fit: cover;
 }
 .card-blur {
