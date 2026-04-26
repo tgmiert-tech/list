@@ -1535,8 +1535,8 @@ input:checked + .slider:before {
     object-fit: cover;
     object-position: center; /* центр как на 2 фото */
     
-filter: blur(18px) brightness(0.7);
-transform: scale(1.15);
+filter: blur(20px) brightness(0.65);
+transform: scale(1.2);
 }
 
 /* затемнение */
