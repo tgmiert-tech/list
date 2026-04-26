@@ -1552,8 +1552,8 @@ transform: scale(1.2);
 }
 .member-card {
     position: relative;
-    width: 220px;
-    height: 260px;
+width: 180px;
+height: 210px;
     overflow: hidden;
 }
 
