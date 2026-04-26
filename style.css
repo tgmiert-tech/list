@@ -1550,12 +1550,18 @@ transform: scale(1.2);
     position: relative;
     z-index: 3;
 }
-.member-card {
-    position: relative;
-    width: 160px;
-    height: 170px; /* чуть больше чтобы текст влез */
-    border-radius: 16px;
-    overflow: hidden;
+.member-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.2),
+        rgba(0,0,0,0.6)
+    );
+
+    z-index: 2;
 }
 
 /* фон */
@@ -1569,22 +1575,20 @@ transform: scale(1.2);
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: blur(8px) brightness(0.5);
-}
 
-/* блюр полоска */
+    filter: blur(12px) brightness(0.7); /* ВАЖНО: не тёмный */
+    transform: scale(1.15);
+}
 .card-blur {
-    position: absolute;
-    top: 22px; /* было 12–18 → опускаем */
+    top: 22px;
     left: 12px;
     right: 12px;
     height: 28px;
 
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(10px);
     background: rgba(255,255,255,0.08);
 
     border-radius: 8px;
-    z-index: 2;
 }
 
 /* аватар */
@@ -1620,4 +1624,10 @@ transform: scale(1.2);
     color: white;
     z-index: 3;
     font-size: 12px;
+}
+.card-avatar,
+.card-content,
+.card-blur {
+    position: absolute;
+    z-index: 3;
 }
