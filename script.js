@@ -7,6 +7,8 @@ const members = [
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
         avatar: "img/avatar1.jpg",
+bg: "video/fon1.mp4", 
+blur: 0, 
         verified: true,
         pinned: true,
         project: "https://t.me/+hgYBTlhzZOZmNDY0",
@@ -546,9 +548,17 @@ badgesHtml += `<span class="badge category">${member.category}</span>`;
 container.innerHTML = `
     <div class="profile-header">
         
-        <div class="profile-bg">
-            <img src="img/avatar${member.id}.jpg" class="bg-image">
-        </div>
+ <div class="profile-bg">
+    ${
+        member.bg 
+        ? `<video class="bg-video" autoplay muted loop>
+                <source src="${member.bg}" type="video/mp4">
+           </video>`
+        : `<img src="img/avatar${member.id}.jpg" 
+               class="bg-image" 
+               style="filter: blur(${member.blur}px);">`
+    }
+</div>
 
         <div class="profile-overlay"></div>
 
