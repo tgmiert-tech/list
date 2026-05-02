@@ -15,14 +15,14 @@ fon: "fon/fon1.jpg", // или false
         verified: true,
         pinned: true,
         project: "https://t.me/+hgYBTlhzZOZmNDY0",
-        telegram: "tgmirok",
+        telegram: "tgmiert",
         chat: "https://t.me/+fvkCt3uNSc84NTE0",
         joinDate: "2026-05-05",
         activity: "Постоянная",
         details: "Создатель и владелеца fame list. Занимаюсь развитием сообщества и модерацией. Отвечаю на вопросы по поводу добавления в список и других услуг.",
         skills: ["Администрирование", "Модерация", "Развитие сообщества"],
         socials: {
-            telegram: "@tgmirok",
+            telegram: "@tgmiert",
             project: "https://t.me/+hgYBTlhzZOZmNDY0",
         }
     },    
