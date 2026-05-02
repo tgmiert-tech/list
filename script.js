@@ -47,10 +47,10 @@ fon: "fon/fon2.jpg", // или false
         joinDate: "2026-05-05",
         activity: "Постоянная",
         details: "второй владелец fame list. Занимаюсь кодингом и модерацией. Отвечаю на вопросы по поводу добавления в список и других услуг.",
-        skills:  ["Администрирование", "Модерация", "Развитие сообщества"],
+        skills:  ["кодер"],
         socials: {
             telegram: "@swatolk",
-            project: "https://t.me/+lCld3oGs4ewxOTRh,
+            project: "https://t.me/+lCld3oGs4ewxOTRh",
         }
     },   
 ];
