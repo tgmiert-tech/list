@@ -7,10 +7,10 @@ const members = [
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
         avatar: "img/avatar1.jpg",
-bg: false, // bg: "video/fon1.mp4", // или false
-blur: 10, // процент не указывам 
+bg: "video/fon1.mp4", // bg: "video/fon1.mp4", // или false
+blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
-fon: "fon/fon1.jpg", // или false
+fon: "false", // или false либо fon: "fon/fon1.jpg",
         verified: true,
         pinned: true,
         color: "#206676",
@@ -37,7 +37,7 @@ fon: "fon/fon1.jpg", // или false
 bg: false, // bg: "video/fon1.mp4", // или false
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
-fon: "fon/fon2.jpg", // или false
+fon: "fon/fon2.jpg", // или false либо fon: "fon/fon1.jpg",
         verified: true,
         pinned: true,
         color: "#FFFFFF",
