@@ -1669,3 +1669,57 @@ transform: scale(1.2);
         0 0 30px rgba(0,0,0,0.6);
     transform: translateY(-8px) scale(1.02);
 }
+/* === FIX BADGES VISIBILITY === */
+
+.member-card.verified::before {
+    background: #00ff88 !important;
+    color: #000 !important;
+    border: none !important;
+    box-shadow: 0 0 10px #00ff88;
+}
+
+.member-card.pinned::after {
+    font-size: 1.2rem;
+    opacity: 1 !important;
+    filter: drop-shadow(0 0 5px #ffaa00);
+}
+
+/* Бейджи в профиле */
+.badge.verified {
+    background: #00ff88 !important;
+    color: #000 !important;
+    border: none !important;
+    box-shadow: 0 0 8px #00ff88;
+}
+
+.badge.pinned {
+    background: #ffaa00 !important;
+    color: #000 !important;
+    border: none !important;
+    box-shadow: 0 0 8px #ffaa00;
+}
+
+/* фикс читаемости при тёмных цветах */
+.member-card {
+    position: relative;
+    z-index: 1;
+}
+
+.member-card::before,
+.member-card::after {
+    z-index: 2;
+}
+
+/* === CARD COLOR FIX === */
+.member-card {
+    border: 1px solid var(--card-color, #333) !important;
+}
+
+.member-card::before {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--card-color, #666),
+        transparent
+    ) !important;
+}
