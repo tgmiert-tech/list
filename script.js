@@ -7,8 +7,9 @@ const members = [
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
         avatar: "img/avatar1.jpg",
-bg: false, 
-blur: 65, 
+bg: false, // bg: "video/fon1.mp4", // или false
+blur: 40, // процент не указывам 
+        //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
         verified: true,
         pinned: true,
         project: "https://t.me/+hgYBTlhzZOZmNDY0",
