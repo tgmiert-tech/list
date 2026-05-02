@@ -3,7 +3,7 @@ const members = [
         id: 1,
         nickname: "миерт",
         username: "@tgmiert",
-        color: "#04819E",
+        color: "#FFF100",
         category: "Модерация",
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
