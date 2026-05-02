@@ -1117,3 +1117,9 @@ function switchSection(sectionId) {
         }
     });
 }
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('faq-question')) {
+        const item = e.target.parentElement;
+        item.classList.toggle('active');
+    }
+});
