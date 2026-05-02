@@ -25,7 +25,34 @@ fon: "fon/fon1.jpg", // или false
             telegram: "@tgmiert",
             project: "https://t.me/+hgYBTlhzZOZmNDY0",
         }
-    },    
+    },  
+        {
+        id: 2,
+        nickname: "Злюка",
+        username: "@swatolk",
+        category: "Модерация",
+        role: "Владелец",
+        description: "второй владелец листа",
+        avatar: "img/avatar2.jpg",
+bg: false, // bg: "video/fon1.mp4", // или false
+blur: 0, // процент не указывам 
+        //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
+fon: "fon/fon2.jpg", // или false
+        verified: true,
+        pinned: true,
+        color: "#FFFFFF",
+        project: "https://t.me/+lCld3oGs4ewxOTRh",
+        telegram: "swatolk",
+        chat: "https://t.me/+fvkCt3uNSc84NTE0",
+        joinDate: "2026-05-05",
+        activity: "Постоянная",
+        details: "второй владелец fame list. Занимаюсь кодингом и модерацией. Отвечаю на вопросы по поводу добавления в список и других услуг.",
+        skills: ["кодинг"],
+        socials: {
+            telegram: "@swatolk",
+            project: "https://t.me/+lCld3oGs4ewxOTRh,
+        }
+    },   
 ];
 
 let currentTheme = 'black';
