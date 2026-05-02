@@ -8,8 +8,9 @@ const members = [
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
         avatar: "img/avatar1.jpg",
 bg: false, // bg: "video/fon1.mp4", // или false
-blur: 40, // процент не указывам 
+blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
+fon: "fon/fon1.jpg", // или false
         verified: true,
         pinned: true,
         project: "https://t.me/+hgYBTlhzZOZmNDY0",
@@ -549,12 +550,18 @@ badgesHtml += `<span class="badge category">${member.category}</span>`;
 container.innerHTML = `
     <div class="profile-header">
         
- <div class="profile-bg">
+<div class="profile-bg">
     ${
-        member.bg 
+        member.bg
         ? `<video class="bg-video" autoplay muted loop>
                 <source src="${member.bg}" type="video/mp4">
            </video>`
+
+        : member.fon
+            ? `<img src="${member.fon}" 
+                   class="bg-image" 
+                   style="filter: blur(${member.blur}px);">`
+
         : `<img src="img/avatar${member.id}.jpg" 
                class="bg-image" 
                style="filter: blur(${member.blur}px);">`
