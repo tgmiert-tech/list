@@ -3,7 +3,7 @@ const members = [
         id: 1,
         nickname: "миерт",
         username: "@tgmiert",
-        color: "#225E79",
+        color: false,
         category: "Модерация",
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
@@ -12,7 +12,6 @@ bg: false, // bg: "video/fon1.mp4", // или false
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
 fon: "fon/fon1.jpg", // или false
-        scam: true,
         verified: true,
         pinned: true,
         project: "https://t.me/+hgYBTlhzZOZmNDY0",
