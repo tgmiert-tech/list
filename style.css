@@ -634,6 +634,11 @@ img.avatar-fallback {
 }
 
 .badge.category {
+    background: rgba(102, 102, 255, 0.1);
+    color: #66f;
+    border-color: #66f;
+}
+
 .badge.scam {
     background: rgba(255, 50, 50, 0.15);
     color: #ff4444;
