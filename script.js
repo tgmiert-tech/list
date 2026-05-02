@@ -1127,3 +1127,44 @@ document.addEventListener('click', function(e) {
         item.classList.toggle('active');
     }
 });
+// === FIX VERIFIED + PINNED BUG ===
+(function fixMembersSystem() {
+    console.log('Fix system loaded...');
+
+    // нормализация данных
+    members.forEach(m => {
+        m.verified = Boolean(m.verified);
+        m.pinned = Boolean(m.pinned);
+        m.scam = Boolean(m.scam);
+    });
+
+    // фикс сортировки (приоритет)
+    members.sort((a, b) => {
+        if (a.scam !== b.scam) return a.scam ? 1 : -1;
+        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+        if (a.verified !== b.verified) return a.verified ? -1 : 1;
+        return 0;
+    });
+
+    // перерендер карточек
+    const originalCreate = createMemberCard;
+
+    createMemberCard = function(member) {
+        const card = originalCreate(member);
+
+        // чистим классы
+        card.classList.remove('verified', 'pinned', 'scam');
+
+        // применяем правильно
+        if (member.scam) {
+            card.classList.add('scam');
+        } else {
+            if (member.pinned) card.classList.add('pinned');
+            if (member.verified) card.classList.add('verified');
+        }
+
+        return card;
+    };
+
+    console.log('Fix applied ✅');
+})();
