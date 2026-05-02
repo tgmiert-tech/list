@@ -12,6 +12,7 @@ bg: false, // bg: "video/fon1.mp4", // или false
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
 fon: "fon/fon1.jpg", // или false
+        scam: true,
         verified: true,
         pinned: true,
         project: "https://t.me/+hgYBTlhzZOZmNDY0",
