@@ -32,7 +32,7 @@ fon: "fon/fon1.jpg", // или false
         username: "@swatolk",
         category: "Модерация",
         role: "Владелец",
-        description: "второй владелец листа",
+        description: "My bf - @Valentovprime | @alphasnos | @seraphimDNN | второй владелец листа",
         avatar: "img/avatar2.jpg",
 bg: false, // bg: "video/fon1.mp4", // или false
 blur: 0, // процент не указывам 
