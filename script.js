@@ -3,7 +3,6 @@ const members = [
         id: 1,
         nickname: "миерт",
         username: "@tgmiert",
-        color: "#FF0000",
         category: "Модерация",
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
@@ -14,6 +13,7 @@ blur: 0, // процент не указывам
 fon: "fon/fon1.jpg", // или false
         verified: true,
         pinned: true,
+        color: "#FF0000",
         project: "https://t.me/+hgYBTlhzZOZmNDY0",
         telegram: "tgmiert",
         chat: "https://t.me/+fvkCt3uNSc84NTE0",
