@@ -1,8 +1,9 @@
 const members = [
     {
         id: 1,
-        nickname: "мирок",
-        username: "@tgmirok",
+        nickname: "миерт",
+        username: "@tgmiert",
+        color: "#225E79",
         category: "Модерация",
         role: "Владелец",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
@@ -356,6 +357,9 @@ function loadMembers() {
 function createMemberCard(member) {
     const card = document.createElement('div');
     card.className = 'member-card';
+    if (member.color) {
+        card.style.setProperty('--card-color', member.color);
+    }
     card.dataset.id = member.id;
     card.dataset.category = member.category;
     
