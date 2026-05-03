@@ -26,14 +26,13 @@ fon: "fonAricto/fon1717.jpg", // или false либо fon: fonAricto/fon101.jpg
             project: "https://t.me/ArictoSession",
         }
     },  
-        
         {
         id: 1718,
         nickname: "𝙱𝚁𝙰𝙸𝙽. me ",
         username: "@Deferaka",
         category: "Пользователи",
         role: "Пользователь",
-        description: "Я узнал о аристо сессион от миерти он использовал эту имбу а когда я у него спросил что он юзает он мне ответил "чел это же аристо сессион" и дал сыллку",
+        description: "Я узнал о аристо сессион от миерти он использовал эту имбу а когда я у него спросил что он юзает он мне ответил чел это же аристо сессион и дал сыллку",
         avatar: "imgAricto/avatar1718.jpg",
 bg: false, // bg: "videoAricto/fon101.mp4", // или false
 blur: 0, // процент не указывам 
@@ -53,7 +52,6 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
             project: "https://t.me/+1rpjSR0ytG0zZWVh",
         }
     },  
- ];
             {
         id: 1719,
         nickname: "миерт",
