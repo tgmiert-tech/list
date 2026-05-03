@@ -85,7 +85,7 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
         username: "@nyswater",
         category: "Разработчики",
         role: "Совладелец",
-        description: "1",
+        description: "да быть долбаебом хорошо ,но ещё лучше нюхать тапки || @faymovy 🤝 @litorkxi",
         avatar: "imgAricto/avatar1720.jpg",
                 bg: "videoAricto/fon1720.mp4", // bg: "videoAricto/fon101.mp4", // или false
 blur: 0, // процент не указывам 
