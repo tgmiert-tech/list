@@ -81,6 +81,15 @@ fon: "fon/fon3.jpg", // или false либо fon: "fon/fon1.jpg",
     },  
 ];
 
+let arictoMembers = [];
+const arictoScript = document.createElement('script');
+arictoScript.src = 'aricto.js';
+arictoScript.onload = function() {
+    console.log('Aricto Session загружен');
+    initAricto();
+};
+document.head.appendChild(arictoScript);
+
 let currentTheme = 'black';
 let currentNeonColor = '#808080';
 let currentNeonIntensity = 0.5;
