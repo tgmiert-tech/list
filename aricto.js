@@ -1,7 +1,7 @@
 
 const arictoMembers = [
         {
-        id: 3,
+        id: 1,
         nickname: "Ар¡сто?",
         username: "@faymovy",
         category: "ArictoSession",
