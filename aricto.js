@@ -26,31 +26,30 @@ fon: "fonAricto/fon1717.jpg", // или false либо fon: fonAricto/fon101.jpg
             project: "https://t.me/ArictoSession",
         }
     },  
-        
         {
         id: 1718,
-        nickname: "тест",
-        username: "@test",
-        category: "Разработчики",
-        role: "Владелец",
-        description: "Меня зовут Аристослав. Я в Telegram с 2024 года; в КМ я не нахожусь и не находился. с 2018 по 2024 я был в дс в середине 24 попал в тг",
-        avatar: "imgAricto/avatar1717.jpg",
+        nickname: "𝙱𝚁𝙰𝙸𝙽. me ",
+        username: "@Deferaka",
+        category: "Пользователи",
+        role: "Пользователь",
+        description: "Я узнал о аристо сессион от миерти он использовал эту имбу а когда я у него спросил что он юзает он мне ответил "чел это же аристо сессион" и дал сыллку",
+        avatar: "imgAricto/avatar1718.jpg",
 bg: false, // bg: "videoAricto/fon101.mp4", // или false
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
-fon: "fonAricto/fon1717.jpg", // или false либо fon: fonAricto/fon101.jpg,
-        verified: true,
-        pinned: true,
+fon: false, // или false либо fon: fonAricto/fon101.jpg,
+        verified: false,
+        pinned: false,
         color: "#A64300",
-        project: "https://t.me/ArictoSession",
-        telegram: "test",
+        project: "https://t.me/+1rpjSR0ytG0zZWVh",
+        telegram: "@Deferaka",
         joinDate: "2026-05-05",
         activity: "Постоянная",
-        details: " Я  разработчик бесплатного юзер бота ArictoSession по ссылке ArictoBypass.fun (http://arictobypass.fun/). Ранее был разработчиком проектов по типу ArictoSearch (бесплатный шерлок) ArictoFame и ArictoStat (аналог Telelog) Сейчас продвигаю проект под названием ArictoSession.",
-        skills: ["Администрация", "кодер"],
+        details: " я Александр, нахожусь в км, в Telegram с 2023 года.",
+        skills: ["Пользователь", ],
         socials: {
-            telegram: "@test",
-            project: "https://t.me/ArictoSession",
+            telegram: "@Deferaka",
+            project: "https://t.me/+1rpjSR0ytG0zZWVh",
         }
     },  
             {
