@@ -91,8 +91,8 @@ bg: "videoAricto/fon1720.mp4", // bg: "videoAricto/fon101.mp4", // или false
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
 fon: false, // или false либо fon: fonAricto/fon101.jpg,
-        verified: false,
-        pinned: false,
+        verified: true,
+        pinned: true,
         color: "#FFFFFF",
         project: "https://t.me/prxdlostsouls",
         telegram: "@nyswater",
@@ -102,6 +102,32 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
         skills: ["Совладелец, Помощник в разработке.", ],
         socials: {
             telegram: "@nyswater",
+            project: "https://t.me/prxdlostsouls",
+        }
+    },  
+                {
+        id: 1721,
+        nickname: "James Collins",
+        username: "@irgoq",
+        category: "Premium пользователи",
+        role: "Premium пользователь",
+        description: "зашёл в приват бенетова там нашел людей и они вводили команды разные  и им что-то выдавало решил узнать как они мне сказали что подключили аристо ссесион я попросил скинуть канал они мне скинули и так я узнал о нем",
+        avatar: "imgAricto/avatar1721.jpg",
+bg: false, // bg: "videoAricto/fon101.mp4", // или false
+blur: 0, // процент не указывам 
+        //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
+fon: false, // или false либо fon: fonAricto/fon101.jpg,
+        verified: true,
+        pinned: true,
+        color: "#FFFFFF",
+        project: "https://t.me/prxdlostsouls",
+        telegram: "@irgoq",
+        joinDate: "2026-05-05",
+        activity: "Постоянная",
+        details: "узнал о тг зашел создал ак развивался  нашел приваты через них кентов нашел аристо моего пупсика",
+        skills: ["Совладелец, Помощник в разработке.", ],
+        socials: {
+            telegram: "@irgoq",
             project: "https://t.me/prxdlostsouls",
         }
     },  
