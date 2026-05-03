@@ -414,6 +414,7 @@ function createMemberCard(member) {
     }
     card.dataset.id = member.id;
     card.dataset.category = member.category;
+    card.dataset.list = window.arictoActive ? 'aricto' : 'main';
     
     if (member.scam) card.classList.add('scam');
     else if (member.pinned) card.classList.add('pinned');
