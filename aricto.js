@@ -87,7 +87,7 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
         role: "Совладелец",
         description: "",
         avatar: "imgAricto/avatar1720.jpg",
-bg: "videoAricto/fon1720.mp4", // bg: "videoAricto/fon101.mp4", // или false
+bg: "video/fon1720.mp4", // bg: "videoAricto/fon101.mp4", // или false
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
 fon: false, // или false либо fon: fonAricto/fon101.jpg,
