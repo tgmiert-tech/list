@@ -40,7 +40,7 @@ blur: 0, // процент не указывам
 fon: false, // или false либо fon: fonAricto/fon101.jpg,
         verified: false,
         pinned: false,
-        color: "#A64300",
+        color: "#FFFFFF",
         project: "https://t.me/+1rpjSR0ytG0zZWVh",
         telegram: "@Deferaka",
         joinDate: "2026-05-05",
@@ -77,6 +77,32 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
         socials: {
             telegram: "@tgmiert",
             project: "https://t.me/+hgYBTlhzZOZmNDY0",
+        }
+    },  
+        {
+        id: 1720,
+        nickname: "rampage",
+        username: "@nyswater",
+        category: "Разработчики",
+        role: "Совладелец",
+        description: "",
+        avatar: "imgAricto/avatar1720.jpg",
+bg: false, // bg: "videoAricto/fon101.mp4", // или false
+blur: 0, // процент не указывам 
+        //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
+fon: false, // или false либо fon: fonAricto/fon101.jpg,
+        verified: false,
+        pinned: false,
+        color: "#FFFFFF",
+        project: "https://t.me/prxdlostsouls",
+        telegram: "@nyswater",
+        joinDate: "2026-05-05",
+        activity: "Постоянная",
+        details: "Самый пиздатый,работаю вместе с аристо, люблю Настю.",
+        skills: ["Совладелец, Помощник в разработке.", ],
+        socials: {
+            telegram: "@nyswater",
+            project: "https://t.me/prxdlostsouls",
         }
     },  
 ];
