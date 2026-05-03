@@ -67,7 +67,7 @@ blur: 0, // процент не указывам
 fon: "fon/fon3.jpg", // или false либо fon: "fon/fon1.jpg",
         verified: true,
         pinned: true,
-        color: "#206676",
+        color: "#A64300",
         project: "https://t.me/ArictoSession",
         telegram: "faymovy",
         joinDate: "2026-05-05",
