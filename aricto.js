@@ -26,8 +26,7 @@ fon: "fonAricto/fon1717.jpg", // или false либо fon: fonAricto/fon101.jpg
             project: "https://t.me/ArictoSession",
         }
     },  
-];
-
+        
         {
         id: 1718,
         nickname: "тест",
