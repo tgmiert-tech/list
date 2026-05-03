@@ -302,7 +302,12 @@ function initNavigation() {
             });
         }
     });
-    
+    const arictoTab = document.querySelector('.nav-tab[data-section="aricto"]');
+    if (arictoTab) {
+        arictoTab.addEventListener('click', () => {
+            switchSection('aricto-section');
+        });
+    }
    
     const faqBtn = document.getElementById('faq-btn');
     const settingsBtn = document.getElementById('settings-btn');
