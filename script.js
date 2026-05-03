@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadSavedSettings();
     initDynamicNeon();
     initAllAvatars();
-    
+    initArictoSession();
 });
 
 function generateBgGrid() {
