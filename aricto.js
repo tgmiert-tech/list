@@ -5,7 +5,7 @@ const arictoMembers = [
         nickname: "Ар¡сто?",
         username: "@faymovy",
         category: "Разработчики",
-        role: "Владелец",
+        role: "Создатель",
         description: "Меня зовут Аристослав. Я в Telegram с 2024 года; в КМ я не нахожусь и не находился. с 2018 по 2024 я был в дс в середине 24 попал в тг",
         avatar: "imgAricto/avatar1717.jpg",
 bg: false, // bg: "videoAricto/fon101.mp4", // или false
@@ -110,7 +110,7 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
         nickname: "James Collins",
         username: "@irgoq",
         category: "Premium пользователи",
-        role: "Premium пользователь",
+        role: "Premium пользователи",
         description: "зашёл в приват бенетова там нашел людей и они вводили команды разные  и им что-то выдавало решил узнать как они мне сказали что подключили аристо ссесион я попросил скинуть канал они мне скинули и так я узнал о нем",
         avatar: "imgAricto/avatar1721.jpg",
 bg: false, // bg: "videoAricto/fon101.mp4", // или false
