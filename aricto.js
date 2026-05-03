@@ -4,7 +4,7 @@ const arictoMembers = [
         id: 1717,
         nickname: "Ар¡сто?",
         username: "@faymovy",
-        category: "ArictoSession",
+        category: "Разработчики",
         role: "Владелец",
         description: "Меня зовут Аристослав. Я в Telegram с 2024 года; в КМ я не нахожусь и не находился. с 2018 по 2024 я был в дс в середине 24 попал в тг",
         avatar: "imgAricto/avatar1717.jpg",
