@@ -1,4 +1,4 @@
-// aricto.js - Второй лист "Aricto Session"
+
 const arictoMembers = [
     {
         id: 101,
@@ -8,7 +8,7 @@ const arictoMembers = [
         role: "Участник",
         description: "Описание человека",
         avatar: "img/aricto/avatar101.jpg",
-        // ... все те же поля что и в members
+
     },
-    // Здесь будут добавляться люди
+
 ];
