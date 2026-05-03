@@ -120,15 +120,15 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
         verified: true,
         pinned: true,
         color: "#FFFFFF",
-        project: "https://t.me/prxdlostsouls",
+        project: "",
         telegram: "@irgoq",
         joinDate: "2026-05-05",
         activity: "Постоянная",
-        details: "узнал о тг зашел создал ак развивался  нашел приваты через них кентов нашел аристо моего пупсика",
+        details: "узнал о тг зашел создал акк развивался  нашел приваты через них кентов нашел аристо моего пупсика",
         skills: ["Совладелец, Помощник в разработке.", ],
         socials: {
             telegram: "@irgoq",
-            project: "https://t.me/prxdlostsouls",
+            project: "",
         }
     },  
 ];
