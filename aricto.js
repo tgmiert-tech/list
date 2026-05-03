@@ -62,9 +62,9 @@ fon: "fonAricto/fon1717.jpg", // или false либо fon: fonAricto/fon101.jpg
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
         avatar: "imgAricto/avatar1719.jpg",
 bg: false, // bg: "videoAricto/fon101.mp4", // или false
-blur: 0, // процент не указывам 
+blur: 10, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
-fon: "fonAricto/fon1719.jpg", // или false либо fon: fonAricto/fon101.jpg,
+fon: false, // или false либо fon: fonAricto/fon101.jpg,
         verified: true,
         pinned: true,
         color: "#206676",
