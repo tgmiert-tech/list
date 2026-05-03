@@ -441,12 +441,17 @@ card.innerHTML = `
 `;
     
   
-    setTimeout(() => {
-        const img = card.querySelector(`#${avatarId}`);
-        if (img) {
-            loadAvatarWithFallback(img, `img/avatar${member.id}.jpg`, member.nickname);
-        }
-    }, 10);
+setTimeout(() => {
+    const img = card.querySelector(`#${avatarId}`);
+    if (img) {
+
+        const folder = member.avatar 
+            ? '' 
+            : 'img/';
+        const avatarSrc = member.avatar || `${folder}avatar${member.id}.jpg`;
+        loadAvatarWithFallback(img, avatarSrc, member.nickname);
+    }
+}, 10);
     
     return card;
 }
