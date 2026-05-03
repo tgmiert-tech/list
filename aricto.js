@@ -53,4 +53,31 @@ fon: "fonAricto/fon1717.jpg", // или false либо fon: fonAricto/fon101.jpg
             project: "https://t.me/ArictoSession",
         }
     },  
+            {
+        id: 1719,
+        nickname: "миерт",
+        username: "@tgmiert",
+        category: "Модерация",
+        role: "Владелец",
+        description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
+        avatar: "imgAricto/avatar1719.jpg",
+bg: false, // bg: "videoAricto/fon101.mp4", // или false
+blur: 0, // процент не указывам 
+        //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
+fon: "fonAricto/fon1719.jpg", // или false либо fon: fonAricto/fon101.jpg,
+        verified: true,
+        pinned: true,
+        color: "#206676",
+        project: "https://t.me/+hgYBTlhzZOZmNDY0",
+        telegram: "tgmiert",
+        chat: "https://t.me/+fvkCt3uNSc84NTE0",
+        joinDate: "2026-05-05",
+        activity: "Постоянная",
+        details: "Создатель и владелеца fame list. Занимаюсь развитием сообщества и модерацией. Отвечаю на вопросы по поводу добавления в список и других услуг.",
+        skills: ["Администрация", "Модерация", "Развитие сообщества"],
+        socials: {
+            telegram: "@tgmiert",
+            project: "https://t.me/+hgYBTlhzZOZmNDY0",
+        }
+    },  
 ];
