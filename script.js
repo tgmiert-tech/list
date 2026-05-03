@@ -615,10 +615,10 @@ container.innerHTML = `
         
 <div class="profile-bg">
     ${
-        member.bg
-        ? `<video class="bg-video" autoplay muted loop>
-                <source src="${member.bg}" type="video/mp4">
-           </video>`
+${member.bg 
+    ? `<video class="bg-video" autoplay muted loop playsinline preload="auto">
+           <source src="${member.bg}" type="video/mp4">
+       </video>`
 
         : member.fon
             ? `<img src="${member.fon}" 
@@ -1385,10 +1385,10 @@ function showProfileFromData(member, listType) {
     container.innerHTML = `
         <div class="profile-header">
             <div class="profile-bg">
-                ${member.bg 
-                    ? `<video class="bg-video" autoplay muted loop>
-                           <source src="${listType === 'aricto' ? 'videoAricto/' : 'video/'}${member.bg}" type="video/mp4">
-                       </video>`
+    ${member.bg 
+    ? `<video class="bg-video" autoplay muted loop playsinline preload="auto">
+           <source src="${member.bg}" type="video/mp4">
+       </video>`
                     : member.fon 
                         ? `<img src="${member.fon}" class="bg-image" style="filter: blur(${member.blur}px);">`
                         : `<img src="${avatarPath}" class="bg-image" style="filter: blur(${member.blur}px);">`
