@@ -506,6 +506,7 @@ function createSocialButton(icon, text, url, className = '') {
 
 
 function showProfile(memberId) {
+  window.arictoActive = false;
     const member = members.find(m => m.id == memberId);
     if (!member) {
         console.error('Участник не найден:', memberId);
