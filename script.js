@@ -1221,6 +1221,214 @@ document.addEventListener('click', function(e) {
     console.log('Fix applied ✅');
 })();
 
+// ArictoSession | привет от миерта=)
+function initArictoSession() {
+    console.log('Инициализация Aricto Session...');
+    loadArictoMembers();
+    
+
+    const filterBtns = document.querySelectorAll('#aricto-filter-buttons .filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#aricto-filter-buttons .filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            filterArictoMembers(this.dataset.category);
+        });
+    });
+    
+
+    const searchInput = document.getElementById('aricto-search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            searchArictoMembers(e.target.value.toLowerCase());
+        });
+    }
+}
+
+function loadArictoMembers() {
+    const container = document.getElementById('aricto-members-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (typeof arictoMembers === 'undefined' || arictoMembers.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #888; padding: 40px;">Нет участников для отображения</p>';
+        return;
+    }
+    
+    const sorted = [...arictoMembers].sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        if (a.verified && !b.verified) return -1;
+        if (!a.verified && b.verified) return 1;
+        return 0;
+    });
+    
+    sorted.forEach(member => {
+        const card = createMemberCard(member);
+        card.dataset.list = 'aricto'; 
+        container.appendChild(card);
+    });
+    
+
+    document.querySelectorAll('#aricto-members-container .member-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const memberId = parseInt(this.dataset.id);
+            showArictoProfile(memberId);
+        });
+    });
+}
+
+function filterArictoMembers(category) {
+    const cards = document.querySelectorAll('#aricto-members-container .member-card');
+    cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'block';
+            setTimeout(() => { card.style.opacity = '1'; }, 10);
+        } else {
+            card.style.opacity = '0';
+            setTimeout(() => { card.style.display = 'none'; }, 300);
+        }
+    });
+}
+
+function searchArictoMembers(term) {
+    const cards = document.querySelectorAll('#aricto-members-container .member-card');
+    const activeFilter = document.querySelector('#aricto-filter-buttons .filter-btn.active')?.dataset.category || 'all';
+    
+    cards.forEach(card => {
+        const nickname = card.querySelector('h3')?.textContent.toLowerCase() || '';
+        const description = card.querySelector('.member-description')?.textContent.toLowerCase() || '';
+        const matchesSearch = nickname.includes(term) || description.includes(term);
+        const matchesFilter = activeFilter === 'all' || card.dataset.category === activeFilter;
+        
+        if (matchesSearch && matchesFilter) {
+            card.style.display = 'block';
+            setTimeout(() => { card.style.opacity = '1'; }, 10);
+        } else {
+            card.style.opacity = '0';
+            setTimeout(() => { card.style.display = 'none'; }, 300);
+        }
+    });
+}
+
+function showArictoProfile(memberId) {
+    const member = arictoMembers.find(m => m.id == memberId);
+    if (!member) {
+        console.error('Aricto участник не найден:', memberId);
+        return;
+    }
+    
+
+    window.arictoActive = true;
+    
+
+    showProfileFromData(member, 'aricto');
+}
+
+function showProfileFromData(member, listType) {
+    const container = document.getElementById('profile-content');
+    if (!container) return;
+
+    const joinDate = new Date(member.joinDate);
+    const formattedDate = joinDate.toLocaleDateString('ru-RU', {
+        year: 'numeric', month: 'long', day: 'numeric'
+    });
+    
+
+    let badgesHtml = '';
+    if (member.verified) badgesHtml += '<span class="badge verified">✓ Верифицирован</span>';
+    if (member.pinned) badgesHtml += '<span class="badge pinned">📌 Закреплён</span>';
+    badgesHtml += `<span class="badge category">${member.category}</span>`;
+    
+
+    let mainButtons = createSocialButton('fab fa-telegram', 'Написать в ЛС', `https://t.me/${member.telegram}`, 'telegram');
+    if (member.project) mainButtons += createSocialButton('fas fa-external-link-alt', 'Основной канал', member.project, 'telegram');
+    if (member.chat) mainButtons += createSocialButton('fas fa-comments', 'Чат', member.chat, 'telegram');
+    
+
+    const stats = {
+        'Статус': member.role,
+        'Верификация': member.verified ? '✓ Подтверждён' : '✗ Не подтверждён',
+        'Закреп': member.pinned ? '📌 Включён' : '✗ Выключен',
+        'Дата регистрации': formattedDate,
+        'Активность': member.activity,
+        'ID': member.id
+    };
+    
+    let statsHtml = '';
+    Object.entries(stats).forEach(([label, value]) => {
+        if (value) {
+            statsHtml += `
+                <div class="stat-item">
+                    <span class="stat-label">${label}:</span>
+                    <span class="stat-value">${value}</span>
+                </div>
+            `;
+        }
+    });
+    
+
+    const avatarPath = listType === 'aricto' ? `imgAricto/avatar${member.id}.jpg` : `img/avatar${member.id}.jpg`;
+    const fonPath = listType === 'aricto' ? `fonAricto/fon${member.id}.jpg` : `fon/fon${member.id}.jpg`;
+    const videoPath = listType === 'aricto' ? `videoAricto/fon${member.id}.mp4` : `video/fon${member.id}.mp4`;
+    
+    const profileAvatarId = `profile-avatar-${member.id}`;
+    
+    container.innerHTML = `
+        <div class="profile-header">
+            <div class="profile-bg">
+                ${member.bg 
+                    ? `<video class="bg-video" autoplay muted loop>
+                           <source src="${listType === 'aricto' ? 'videoAricto/' : 'video/'}${member.bg}" type="video/mp4">
+                       </video>`
+                    : member.fon 
+                        ? `<img src="${member.fon}" class="bg-image" style="filter: blur(${member.blur}px);">`
+                        : `<img src="${avatarPath}" class="bg-image" style="filter: blur(${member.blur}px);">`
+                }
+            </div>
+            <div class="profile-overlay"></div>
+            
+            <div class="profile-header-content">
+                <div class="profile-avatar">
+                    <img id="${profileAvatarId}" src="${avatarPath}" alt="${member.nickname}">
+                </div>
+                <h1 class="profile-title">${member.nickname}</h1>
+                <p class="profile-username">${member.username}</p>
+                <div class="profile-badges">${badgesHtml}</div>
+                <div class="profile-actions">
+                    ${mainButtons}
+                    <button class="action-btn" onclick="copyProfileLink('${member.nickname}')">
+                        <i class="fas fa-share"></i> Поделиться
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-content">
+            <div class="profile-description">
+                <h3>Описание</h3>
+                <p>${member.description || 'Нет описания'}</p>
+                ${member.details ? `<h3 style="margin-top: 30px;">Детали</h3><p>${member.details}</p>` : ''}
+                ${member.skills ? `<h3 style="margin-top: 30px;">Навыки</h3><p>${member.skills.join(' • ')}</p>` : ''}
+            </div>
+            <div class="profile-stats">
+                <h3>Статистика</h3>
+                ${statsHtml}
+            </div>
+        </div>
+    `;
+    
+
+    setTimeout(() => {
+        const img = document.getElementById(profileAvatarId);
+        if (img) {
+            loadAvatarWithFallback(img, avatarPath, member.nickname);
+        }
+    }, 10);
+    
+    switchSection('profile-details');
+}
 
 
 
