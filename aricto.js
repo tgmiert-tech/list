@@ -1,17 +1,17 @@
 
 const arictoMembers = [
         {
-        id: 1,
+        id: 01,
         nickname: "Ар¡сто?",
         username: "@faymovy",
         category: "ArictoSession",
         role: "Владелец",
         description: "Меня зовут Аристослав. Я в Telegram с 2024 года; в КМ я не нахожусь и не находился. с 2018 по 2024 я был в дс в середине 24 попал в тг",
-        avatar: "img/avatar3.jpg",
-bg: false, // bg: "video/fon1.mp4", // или false
+        avatar: "imgAricto/avatar01.jpg",
+bg: false, // bg: "videoAricto/fon101.mp4", // или false
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
-fon: "fon/fon3.jpg", // или false либо fon: "fon/fon1.jpg",
+fon: "fonAricto/fon01.jpg", // или false либо fon: fonAricto/fon101.jpg,
         verified: true,
         pinned: true,
         color: "#A64300",
