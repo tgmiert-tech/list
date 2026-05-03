@@ -57,8 +57,8 @@ fon: "fonAricto/fon1717.jpg", // или false либо fon: fonAricto/fon101.jpg
         id: 1719,
         nickname: "миерт",
         username: "@tgmiert",
-        category: "Модерация",
-        role: "Владелец",
+        category: "Premium пользователи",
+        role: "Premium пользователи",
         description: "Владелец листа. вход бесплатно / галочка 15 звезд / закреп 25 звезд.",
         avatar: "imgAricto/avatar1719.jpg",
 bg: false, // bg: "videoAricto/fon101.mp4", // или false
