@@ -85,9 +85,10 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
         username: "@nyswater",
         category: "Разработчики",
         role: "Совладелец",
-        description: "",
+        description: "1",
+                bg: "videoAricto/fon1720.mp4", // bg: "videoAricto/fon101.mp4", // или false
         avatar: "imgAricto/avatar1720.jpg",
-bg: "videoAricto/fon1720.mp4", // bg: "videoAricto/fon101.mp4", // или false
+
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
 fon: false, // или false либо fon: fonAricto/fon101.jpg,
