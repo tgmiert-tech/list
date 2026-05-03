@@ -86,9 +86,8 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
         category: "Разработчики",
         role: "Совладелец",
         description: "1",
-                bg: "videoAricto/fon1720.mp4", // bg: "videoAricto/fon101.mp4", // или false
         avatar: "imgAricto/avatar1720.jpg",
-
+                bg: "videoAricto/fon1720.mp4", // bg: "videoAricto/fon101.mp4", // или false
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
 fon: false, // или false либо fon: fonAricto/fon101.jpg,
@@ -100,7 +99,7 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
         joinDate: "2026-05-05",
         activity: "Постоянная",
         details: "Самый пиздатый,работаю вместе с аристо, люблю Настю.",
-        skills: ["Совладелец, Помощник в разработке.", ],
+        skills: ["Совладелец, Помощник в разработке.",],
         socials: {
             telegram: "@nyswater",
             project: "https://t.me/prxdlostsouls",
