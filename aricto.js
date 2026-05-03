@@ -26,6 +26,7 @@ fon: "fonAricto/fon1717.jpg", // или false либо fon: fonAricto/fon101.jpg
             project: "https://t.me/ArictoSession",
         }
     },  
+        
         {
         id: 1718,
         nickname: "𝙱𝚁𝙰𝙸𝙽. me ",
@@ -79,4 +80,3 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
             project: "https://t.me/+hgYBTlhzZOZmNDY0",
         }
     },  
-];
