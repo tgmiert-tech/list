@@ -1235,3 +1235,106 @@ document.addEventListener('click', function(e) {
 
     console.log('Fix applied ✅');
 })();
+
+
+function initAricto() {
+    const container = document.getElementById('aricto-container');
+    if (!container) return;
+    
+    loadArictoMembers();
+    
+    
+    const filterBtns = document.querySelectorAll('#aricto-filters .filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            filterArictoMembers(this.dataset.category);
+        });
+    });
+    
+      const searchInput = document.getElementById('aricto-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            searchArictoMembers(e.target.value.toLowerCase());
+        });
+    }
+}
+
+function loadArictoMembers() {
+    const container = document.getElementById('aricto-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (arictoMembers.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #888; padding: 40px;">Скоро здесь появятся люди...</p>';
+        return;
+    }
+    
+    arictoMembers.forEach(member => {
+        const card = createMemberCard(member);
+        container.appendChild(card);
+    });
+    
+    document.querySelectorAll('#aricto-container .member-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const memberId = this.dataset.id;
+            showArictoProfile(memberId);
+        });
+    });
+}
+
+function filterArictoMembers(category) {
+    const cards = document.querySelectorAll('#aricto-container .member-card');
+    cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'block';
+            card.style.opacity = '1';
+        } else {
+            card.style.opacity = '0';
+            setTimeout(() => { card.style.display = 'none'; }, 300);
+        }
+    });
+}
+
+function searchArictoMembers(term) {
+    const activeFilter = document.querySelector('#aricto-filters .filter-btn.active')?.dataset.category || 'all';
+    const cards = document.querySelectorAll('#aricto-container .member-card');
+    
+    cards.forEach(card => {
+        const nickname = card.querySelector('h3')?.textContent.toLowerCase() || '';
+        const description = card.querySelector('.member-description')?.textContent.toLowerCase() || '';
+        
+        const matchesSearch = nickname.includes(term) || description.includes(term);
+        const matchesFilter = activeFilter === 'all' || card.dataset.category === activeFilter;
+        
+        if (matchesSearch && matchesFilter) {
+            card.style.display = 'block';
+            card.style.opacity = '1';
+        } else {
+            card.style.opacity = '0';
+            setTimeout(() => { card.style.display = 'none'; }, 300);
+        }
+    });
+}
+
+function showArictoProfile(memberId) {
+    const member = arictoMembers.find(m => m.id == memberId);
+    if (!member) return;
+    
+
+    const profileSection = document.getElementById('profile-details');
+    if (profileSection) {
+
+        const tempMembers = [...members];
+        members.length = 0;
+        members.push(member);
+        
+        showProfile(memberId);
+        
+
+        members.length = 0;
+        members.push(...tempMembers);
+    }
+}
