@@ -615,16 +615,14 @@ container.innerHTML = `
         
 <div class="profile-bg">
     ${
-${member.bg 
-    ? `<video class="bg-video" autoplay muted loop playsinline preload="auto">
-           <source src="${member.bg}" type="video/mp4">
-       </video>`
-
+        member.bg
+        ? `<video class="bg-video" autoplay muted loop playsinline preload="auto">
+               <source src="${member.bg}" type="video/mp4">
+           </video>`
         : member.fon
             ? `<img src="${member.fon}" 
                    class="bg-image" 
                    style="filter: blur(${member.blur}px);">`
-
         : `<img src="img/avatar${member.id}.jpg" 
                class="bg-image" 
                style="filter: blur(${member.blur}px);">`
