@@ -53,6 +53,7 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
             project: "https://t.me/+1rpjSR0ytG0zZWVh",
         }
     },  
+ ];
             {
         id: 1719,
         nickname: "миерт",
@@ -80,3 +81,4 @@ fon: false, // или false либо fon: fonAricto/fon101.jpg,
             project: "https://t.me/+hgYBTlhzZOZmNDY0",
         }
     },  
+];
