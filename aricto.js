@@ -117,15 +117,15 @@ bg: false, // bg: "videoAricto/fon101.mp4", // или false
 blur: 0, // процент не указывам 
         //если ты серьезно думаешь что это гпт написал ты чекнутый. это обычная заметка
 fon: false, // или false либо fon: fonAricto/fon101.jpg,
-        verified: true,
-        pinned: true,
+        verified: false,
+        pinned: false,
         color: "#FFFFFF",
         project: "",
         telegram: "@irgoq",
         joinDate: "2026-05-05",
         activity: "Постоянная",
         details: "узнал о тг зашел создал акк развивался  нашел приваты через них кентов нашел аристо моего пупсика",
-        skills: ["Совладелец, Помощник в разработке.", ],
+        skills: ["Пользователь, Премиум пользователь.", ],
         socials: {
             telegram: "@irgoq",
             project: "",
